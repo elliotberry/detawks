@@ -1,6 +1,14 @@
 ![enter image description here](https://i.postimg.cc/2kYnFPGY/download.png)
 # detawks
 Very rough copy of [detox](https://github.com/dharple/detox) in node, with my own personal opinions about file naming. I just wanted to be able to install my detox setup with `yarn` tbh.
+- removes spaces, replaces with dashes
+- i like dashes
+- removes underscores
+- converts to lowercase
+- converts most accented characters to their unaccented equivalent, which it sort of intolerant i suppose, sorry
+- removes most punctuation
+- please use at your own risk
+
 ## Usage
 
 Run `detawks <glob>`.
