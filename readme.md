@@ -1,4 +1,4 @@
-![enter image description here](https://i.postimg.cc/2kYnFPGY/download.png)
+![enter image description here](https://i.postimg.cc/d1W7JNgN/download.png)
 # detawks
 Very rough copy of [detox](https://github.com/dharple/detox) in node, with my own personal opinions about file naming. I just wanted to be able to install my detox setup with `yarn` tbh.
 - removes spaces, replaces with dashes
