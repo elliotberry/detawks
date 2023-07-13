@@ -1,9 +1,0 @@
-{
-
-    "config": {
-        "sequences": [
-            "lowercase",
-            "spaces-to-dashes"
-        ]
-    }
-}
