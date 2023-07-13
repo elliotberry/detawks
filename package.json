@@ -1,0 +1,52 @@
+{
+  "name": "detawks",
+  "version": "0.0.3",
+  "description": "",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@bitbucket.org/erberry/js-detox.git"
+  },
+  "bin": {
+    "detawks": "./index.js"
+  },
+  "type": "module",
+  "author": "Elliot Berry",
+  "license": "The Unlicense",
+
+  "dependencies": {
+    "chalk": "^5.0.1",
+    "fdir": "^6.0.1",
+    "yargs": "^17.6.2"
+  },
+  "eslintConfig": {
+    "root": true,
+    "parserOptions": {
+      "ecmaVersion": 12,
+      "sourceType": "module"
+    },
+    "extends": [
+      "eslint:recommended",
+      "prettier"
+    ],
+    "env": {
+      "node": true,
+      "es6": true
+    },
+    "rules": {
+      "no-console": "off",
+      "no-unused-vars": "warn"
+    }
+  },
+  "prettier": {
+    "trailingComma": "es5",
+    "tabWidth": 4,
+    "semi": false,
+    "singleQuote": true
+  },
+  "devDependencies": {
+    "eslint": "^8.16.0",
+    "eslint-config-prettier": "^8.5.0",
+    "prettier": "^2.7.1"
+  }
+}
