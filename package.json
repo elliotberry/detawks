@@ -1,6 +1,6 @@
 {
   "name": "detawks",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "An opinionated mass file renamer in node. Meant to be similar to the venerable detox unix application.",
   "main": "index.js",
   "repository": {
