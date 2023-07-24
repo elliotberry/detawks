@@ -1,7 +1,7 @@
 #mine
 node_modules
 .htaccess
-
+.vscode
 # Compiled source #
 ###################
 *.com

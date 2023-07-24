@@ -1,21 +1,29 @@
 {
   "name": "detawks",
   "version": "0.0.3",
-  "description": "",
+  "description": "An opinionated mass file renamer in node. Meant to be similar to the venerable detox unix application.",
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@bitbucket.org/erberry/js-detox.git"
+    "url": "git@github.com:elliotberry/detawks.git"
   },
+  "engines": {
+    "node": ">=18.10"
+  },
+  "files": [
+    "lib/**/*",
+    "index.js"
+ ],
   "bin": {
     "detawks": "./index.js"
   },
   "type": "module",
   "author": "Elliot Berry",
   "license": "The Unlicense",
-
   "dependencies": {
+    
     "chalk": "^5.0.1",
+    "change-case": "^4.1.2",
     "fdir": "^6.0.1",
     "yargs": "^17.6.2"
   },
