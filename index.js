@@ -1,11 +1,10 @@
 import yargs from 'yargs/yargs'
-import { fdir } from 'fdir'
-import path from 'path'
 import getFilePathInfo from './lib/file-path-info.js'
 import ignore from './lib/ignore.js'
 import processOneFile from './lib/process-one-file.js'
-import fs from 'fs'
-var opts
+import { useFdir } from './lib/useFdir.js'
+import { getPathIfPath } from './lib/getPathIfPath.js'
+export var opts;
 
 var inputStr;
 const truncatePathIfPossible = (str) => {
@@ -17,81 +16,24 @@ const truncatePathIfPossible = (str) => {
     return str
 }
 
-function isStringAGlobPattern(inputString) {
+export function isStringAGlobPattern(inputString) {
     const globPatternRegex = /[*]/
     return globPatternRegex.test(inputString)
 }
+
+
 const replaceAll = (str, find, replace) => {
     return str.split(find).join(replace)
 }
-const replaceSquiglyWithHome = (str) => {
+
+
+export const replaceSquiglyWithHome = (str) => {
     if (str.includes('~')) {
         return replaceAll(str, '~', process.env.HOME)
     }
     return str
 }
-//verify input
-const getPathIfPath = async (globPath) => {
-    let ret = null
-    globPath = replaceSquiglyWithHome(globPath)
-    try {
-        let stats = await fs.promises.stat(globPath)
-        if (stats.isDirectory() || stats.isFile()) {
-            ret = {
-                path: path.resolve(globPath),
-                parent: path.dirname(globPath),
-                parentPath: path.resolve(path.dirname(globPath)),
-                type: stats.isDirectory() ? 'directory' : 'file',
-            }
-        }
-    } catch (e) {
-        ret = null
-    }
 
-    if (ret === null) {
-        if (isStringAGlobPattern(globPath)) {
-            ret = { path: globPath, type: 'glob' }
-        }
-    }
-
-    return ret
-}
-
-const useFdir = async (globPattern) => {
-    var files = []
-    if (opts.directories) {
-        !opts.silent && console.log(`including directories.`)
-        if (opts.maxDepth) {
-            files = await new fdir()
-                .withFullPaths()
-                .withMaxDepth(opts.maxDepth)
-                .withDirs()
-                .crawl(globPattern)
-                .withPromise()
-        } else {
-            files = await new fdir()
-                .withFullPaths()
-                .withDirs()
-                .crawl(globPattern)
-                .withPromise()
-        }
-    } else {
-        if (opts.maxDepth) {
-            files = await new fdir()
-                .withMaxDepth(opts.maxDepth)
-                .withFullPaths()
-                .crawl(globPattern)
-                .withPromise()
-        } else {
-            files = await new fdir()
-                .withFullPaths()
-                .crawl(globPattern)
-                .withPromise()
-        }
-    }
-
-    return files
-}
 
 const run = async (globPattern) => {
     inputStr = await getPathIfPath(globPattern)
@@ -112,6 +54,8 @@ const run = async (globPattern) => {
     let arrayOfFilePaths = await files.map((file) =>
         getFilePathInfo(file, opts.fixExts)
     )
+
+    //bugfix
     arrayOfFilePaths = await arrayOfFilePaths.filter((f) => f !== null)
 
     let lengthBefore = arrayOfFilePaths.length
@@ -160,7 +104,7 @@ const main = async () => {
             'u',
             'fix unix file extensions created by backup scripts (e.g. .txt~)'
         )
-        .default('u', false)
+        .default('u', true)
         .alias('d', 'dry run')
         .describe('d', 'dry run, showing what files would be renamed')
         .default('d', false)
