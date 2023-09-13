@@ -1,0 +1,2 @@
+IGNORES = node_modules, .git, .DS_Store
+SEQUENCE = toString, trim, doSwaps, toParamCase, lowerCase
