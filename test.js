@@ -3,6 +3,7 @@ import path from 'path'
 import detawks from './index.js'
 import chalk from 'chalk'
 import slugify from './lib/slugify.js'
+var coolText = chalk.bgBlue.black;
 const testSlugify = () => {
     const testCases = [
         {
@@ -27,42 +28,42 @@ const testSlugify = () => {
     })
 }
 
-const dirPath = path.join(process.cwd(), 'test-assets')
+const dirPath = './test-assets'
 const names = [
-    'Alice',
-    'Bob',
-    'Charlie',
-    'David',
-    'Eve',
-    'Frank',
-    'Grace',
-    'Hannah',
-    'Ivan',
-    'Jack',
-    'Karen',
-    'Liam',
-    'Mona',
-    'Nina',
-    'Oscar',
-    'Paul',
-    'Quinn',
-    'Rita',
-    'Steve',
-    'Tina',
+    'Persian',
+    'Siamese',
+    'Maine Coon',
+    'Ragdoll',
+    'Sphynx',
+    'Bengal',
+    'Abyssinian',
+    'British Shorthair',
+    'Scottish Fold',
+    'Burmese',
+    'Oriental',
+    'Siberian',
+    'Tonkinese',
+    'Russian Blue',
+    'Norwegian Forest',
+    'кошки',
+    'பூனைகள்',
+    '✨🌀🌈🐱‍👤🐱‍🚀🐱‍🐉🐱‍💻👾🎃🕺💃🎉🎲🎸🚀🌠🌌🔮💎🎭🎨🖖🌀✨',
 ]
+
 async function deleteDirectoryAndFiles() {
     // Delete files in the directory
-    fs.readdirSync(dirPath).forEach((file) => {
+    await fs.readdirSync(dirPath).forEach((file) => {
         fs.unlinkSync(path.join(dirPath, file))
     })
 
     // Delete the directory
-    fs.rmdirSync(dirPath)
+    await fs.rmdirSync(dirPath)
+    console.log(coolText("deleted test dir"))
 }
 async function createDirectoryWithFiles() {
     // Create directory
     try {
-        fs.mkdirSync(dirPath)
+        await fs.promises.mkdir(dirPath)
     } catch (err) {
         if (err.code === 'EEXIST') {
             console.log(chalk.yellow('Directory already exists.'))
@@ -72,34 +73,54 @@ async function createDirectoryWithFiles() {
             console.log(chalk.red(err))
         }
     }
-
-    // Create 20 files with random names from the array
-    for (let i = 0; i < 20; i++) {
-        const filePath = path.join(
-            dirPath,
-            `${names[Math.floor(Math.random() * names.length)]}.txt`
-        )
-        fs.writeFileSync(filePath, 'Test content')
+    const getRandomNames = (num = 1) => {
+        let nameArr = []
+        for (let i = 0; i < num; i++) {
+            nameArr.push(names[Math.floor(Math.random() * names.length)])
+        }
+        return nameArr.join(' ')
     }
+    let arr = Array.from({ length: 20 }, (_, i) => i);
+    let testFilesMade = 0
+    let oneFilePath = "";
+    for await (let i of arr) {
+
+        const num = Math.floor(Math.random() * 5) + 1
+        let ext = ".txt"
+        if (i === 0) {
+            ext = '.md'
+        }
+
+        let filePath = path.join(dirPath, `${getRandomNames(num)}${ext}`)
+        await fs.promises.writeFile(filePath, 'Test content')
+        testFilesMade++
+        if (i === 19) {
+            oneFilePath = filePath
+        }
+    }
+    console.log(coolText(`created ${testFilesMade} test files`))
+    return oneFilePath
 }
 
-
 const main = async () => {
-    console.log(chalk.blue('Running tests...'))
+    console.log(coolText('Running tests...'))
     // Execute the functions
-    console.log(chalk.blue('Creating directory with files...'))
-    createDirectoryWithFiles()
-    console.log(chalk.blue('Running detawks...'))
+    console.log(coolText('Creating directory with files...'))
+    let oneFilePath = await createDirectoryWithFiles()
     let opts = { dryrun: false, rename: true, silent: true }
-    console.log(chalk.blue(JSON.stringify(opts, null, 2)))
-    try {
-        await detawks(dirPath, opts)
-    } catch (err) {
-        console.log(chalk.red(err))
-    }
-
-    console.log(chalk.blue('Deleting directory and files...'))
-    deleteDirectoryAndFiles()
-    console.log(chalk.blue('Tests finished!'))
+    console.log(coolText('Options for the tests:'))
+    Object.keys(opts).forEach((key) => {
+        console.log(coolText(`${key}: ${opts[key]}`))
+    })
+    console.log(coolText('Running detawks against one file...'))
+    await detawks(oneFilePath, opts)
+    console.log(coolText('Running detawks with a glob...'))
+    await detawks('./test-assets/*.txt', opts)
+    console.log(coolText('Running detawks against the whole test directory...'))
+    
+    await detawks(dirPath, opts)
+    console.log(coolText('Deleting directory and files...'))
+    await deleteDirectoryAndFiles()
+    console.log(coolText('Tests finished!'))
 }
 main()

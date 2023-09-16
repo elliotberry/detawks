@@ -48,7 +48,7 @@ const main = async () => {
     try {
         await detawks(globPattern, opts)
     } catch (e) {
-        console.log(e)
+        console.log(e.toString())
         process.exit(1)
     }
 }

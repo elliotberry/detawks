@@ -2,27 +2,22 @@ import getFilePathInfo from './lib/file-path-info.js'
 import ignore from './lib/ignore.js'
 import processOneFile from './lib/process-one-file.js'
 import useFdir from './lib/useFdir.js'
-import {
-    validateAndFormatInput,
-    truncatePathIfPossible,
-} from './lib/path-validation.js'
+import { validateAndFormatInput } from './lib/path-validation.js'
 import logChanges from './lib/log-changes.js'
 import chalk from 'chalk'
 
+let defaultOpts = {
+    dryrun: false,
+    directories: false,
+    silent: true,
+    rename: true,
+}
 
+const run = async (globPattern, userOpts) => {
+    var opts = Object.assign({}, defaultOpts, userOpts)
 
-const run = async (
-    globPattern,
-    opts = {
-        dryrun: false,
-        directories: false,
-        rename: true,
-        silent: false,
-        maxDepth: null,
-    }
-) => {
-    process.env.SILENT = opts.silent
-    var silent = opts.silent
+    global.silent = opts.silent
+
     let inputStr = await validateAndFormatInput(globPattern)
     let files
 
@@ -35,12 +30,12 @@ const run = async (
     }
 
     let numberFilesFoundInGlob = files.length
-    !silent &&
+    !global.silent &&
         console.log(
             `found ${numberFilesFoundInGlob} files in ${inputStr.path}.`
         )
     if (numberFilesFoundInGlob === 0) {
-        !silent && console.log(`thus, exiting.`)
+        !global.silent && console.log(`thus, exiting.`)
         process.exit(0)
     }
 
@@ -57,12 +52,13 @@ const run = async (
     arrayOfFilePaths = await ignore(arrayOfFilePaths)
 
     if (arrayOfFilePaths.length === 0) {
-        !silent && console.log(`no files to rename, as all were ignored.`)
+        !global.silent &&
+            console.log(`no files to rename, as all were ignored.`)
         process.exit(0)
     }
-    !silent &&
+    !global.silent &&
         console.log(`ignored ${lengthBefore - arrayOfFilePaths.length} files.`)
-    !silent &&
+    !global.silent &&
         console.log(
             chalk.blue(
                 `${arrayOfFilePaths.length}/${files.length} ${
@@ -75,9 +71,7 @@ const run = async (
         console.log(
             arrayOfFilePaths
                 .map((f) => {
-                    let oldPath = truncatePathIfPossible(f.old)
-                    let newPath = truncatePathIfPossible(f.new)
-                    return `${oldPath} -> ${newPath}`
+                    return `${f.old} -> ${f.new}`
                 })
                 .join('\n')
         )
