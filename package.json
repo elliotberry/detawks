@@ -3,7 +3,9 @@
     "version": "0.1.0",
     "description": "An opinionated mass file renamer in node. Meant to be similar to the venerable detox unix application, but, crappier, since it's my attempt in nodejs.",
     "main": "./index.js",
-    "scripts": {"test": "node ./test.js"},
+    "scripts": {
+        "test": "node ./test.js"
+    },
     "repository": {
         "type": "git",
         "url": "git@github.com:elliotberry/detawks.git"
@@ -21,7 +23,7 @@
     },
     "type": "module",
     "author": "ɛʟʟɨօȶ b",
-    "license": "The Unlicense",
+    "license": "Unlicense",
     "dependencies": {
         "chalk": "^5.0.1",
         "change-case": "^4.1.2",
@@ -57,6 +59,18 @@
     "devDependencies": {
         "eslint": "^8.16.0",
         "eslint-config-prettier": "^8.5.0",
-        "prettier": "^2.7.1"
+        "prettier": "^2.7.1",
+        "release-it": "^16.2.1"
+    },
+    "publishConfig": {
+        "registry": "https://registry.npmjs.org"
+    },
+    "release-it": {
+        "git": {
+            "commitMessage": "chore: release v${version}"
+        },
+        "github": {
+            "release": true
+        }
     }
 }

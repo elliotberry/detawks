@@ -1,10 +1,11 @@
 #!/usr/bin/env node
-import yargs from 'yargs/yargs'
+import yargs from 'yargs'
+import { hideBin } from 'yargs/helpers'
 import detawks from './index.js'
 
 const main = async () => {
-    var argv = yargs(process.argv.slice(2))
-        .usage('Usage: $0 <glob> [options]')
+    const parser = await yargs(hideBin(process.argv))
+        .usage('Usage: $0 [options] <glob>')
         .boolean(['d', 'r', 'f', 'u', 's'])
         .describe(
             's',
@@ -25,8 +26,8 @@ const main = async () => {
         .describe('m', 'max depth')
         .default('m', null)
         .help('h')
-        .alias('h', 'help').argv
-
+        .alias('h', 'help')
+    const argv = await parser.parse()
     const globPattern = argv._[0]
     if (!globPattern) {
         console.log('no glob pattern provided')
