@@ -1,30 +1,54 @@
 #!/usr/bin/env node
-import yargs from 'yargs'
+
 import { hideBin } from 'yargs/helpers'
 import detawks from './index.js'
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const main = async () => {
-    const parser = await yargs(hideBin(process.argv))
-        .usage('Usage: $0 [options] <glob>')
-        .boolean(['d', 'r', 'f', 'u', 's'])
-        .describe(
-            's',
-            'silent mode; e.g no console.log describing new file names'
-        )
-        .default('s', false)
 
-        .alias('d', 'dry run')
-        .describe('d', 'dry run, showing what files would be renamed')
-        .default('d', false)
-        .describe(
-            'r',
-            'if overwrite possible, rename files AUTOMAGICALLY without prompting'
-        )
-        .default('r', true)
-        .describe('f', 'include directories')
-        .default('f', false)
-        .describe('m', 'max depth')
-        .default('m', null)
+    const parser = await hideBin(process.argv)
+        .usage('Usage: $0 [options] <glob / file / dir>')
+        .option('s', {
+            alias: 'silent',
+            describe:
+                'silent mode; e.g no console.log describing new file names',
+            type: 'boolean',
+            default: false,
+        })
+        .option('v', {
+            alias: 'verbose',
+            describe:
+                'verbose mode; logs files renamed, as well as other useful information',
+            type: 'boolean',
+            default: false,
+        })
+        .option('d', {
+            alias: 'dryrun',
+            describe: 'dry run, showing what files would be renamed',
+            type: 'boolean',
+            default: false,
+        })
+        .option('r', {
+            alias: 'rename',
+            describe:
+                'if overwrite possible, rename files AUTOMAGICALLY without prompting',
+            type: 'boolean',
+            default: true,
+        })
+        .option('D', {
+            alias: 'dirs',
+            describe: 'include directories',
+            type: 'boolean',
+            default: false,
+        })
+        .option('m', {
+            alias: 'max-depth',
+            describe: 'max depth',
+            type: 'number',
+        })
+    
         .help('h')
         .alias('h', 'help')
     const argv = await parser.parse()
@@ -46,8 +70,9 @@ const main = async () => {
         }
     }
     let opts = userOpts
+    console.log(opts)
     try {
-        await detawks(globPattern, opts)
+        //await detawks(globPattern, opts)
     } catch (e) {
         console.log(e.toString())
         process.exit(1)

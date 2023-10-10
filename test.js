@@ -3,32 +3,11 @@ import path from 'path'
 import detawks from './index.js'
 import chalk from 'chalk'
 import slugify from './lib/slugify.js'
+import { exec } from 'child_process'
 
+//this part is important for the tests to run
+var coolText = chalk.bgBlue.black
 
-var coolText = chalk.bgBlue.black;
-const testSlugify = () => {
-    const testCases = [
-        {
-            input: 'Hello World',
-            expected: 'hello-world',
-        },
-        {
-            input: 'Hello World',
-            expected: 'hello-world',
-        },
-        {
-            input: 'Hello World',
-            expected: 'hello-world',
-        },
-    ]
-    testCases.forEach((testCase) => {
-        const { input, expected } = testCase
-        const actual = slugify(input)
-        if (actual !== expected) {
-            console.log(`expected ${expected} but got ${actual}`)
-        }
-    })
-}
 
 const dirPath = './test-assets'
 const names = [
@@ -52,29 +31,49 @@ const names = [
     '✨🌀🌈🐱‍👤🐱‍🚀🐱‍🐉🐱‍💻👾🎃🕺💃🎉🎲🎸🚀🌠🌌🔮💎🎭🎨🖖🌀✨',
 ]
 
-async function deleteDirectoryAndFiles() {
-    // Delete files in the directory
-    await fs.readdirSync(dirPath).forEach((file) => {
-        fs.unlinkSync(path.join(dirPath, file))
-    })
 
-    // Delete the directory
-    await fs.rmdirSync(dirPath)
-    console.log(coolText("deleted test dir"))
-}
-async function createDirectoryWithFiles() {
-    // Create directory
-    try {
-        await fs.promises.mkdir(dirPath)
-    } catch (err) {
-        if (err.code === 'EEXIST') {
-            console.log(chalk.yellow('Directory already exists.'))
-            await deleteDirectoryAndFiles()
-            await createDirectoryWithFiles()
-        } else {
-            console.log(chalk.red(err))
+const testSlugify = async () => {
+    const testCases = [
+        {
+            input: 'Hello World',
+            expected: 'hello-world',
+        },
+        {
+            input: 'Hello World',
+            expected: 'hello-world',
+        },
+        {
+            input: 'Hello World',
+            expected: 'hello-world',
+        },
+    ]
+   for await (let testCase of testCases) {
+        const { input, expected } = testCase
+        const actual = slugify(input)
+        if (actual !== expected) {
+            console.log(`expected ${expected} but got ${actual}`)
+        }
+        else {
+            console.log(`passed test: ${input} -> ${actual}`)
         }
     }
+}
+
+async function deleteDirectoryAndFiles() {
+    try {
+
+        await fs.promises.rm(dirPath, { recursive: true })
+
+        console.log(coolText('deleted test dir'))
+    } catch (e) {
+        console.log(coolText('no folder to delete'))
+    }
+}
+
+async function createDirectoryWithFiles() {
+    // Create directory
+    await fs.promises.mkdir(dirPath)
+
     const getRandomNames = (num = 1) => {
         let nameArr = []
         for (let i = 0; i < num; i++) {
@@ -82,13 +81,12 @@ async function createDirectoryWithFiles() {
         }
         return nameArr.join(' ')
     }
-    let arr = Array.from({ length: 20 }, (_, i) => i);
+    let arr = Array.from({ length: 20 }, (_, i) => i)
     let testFilesMade = 0
-    let oneFilePath = "";
+    let oneFilePath = ''
     for await (let i of arr) {
-
         const num = Math.floor(Math.random() * 5) + 1
-        let ext = ".txt"
+        let ext = '.txt'
         if (i === 0) {
             ext = '.md'
         }
@@ -104,25 +102,90 @@ async function createDirectoryWithFiles() {
     return oneFilePath
 }
 
-const main = async () => {
+const withAPI = async () => {
+    await deleteDirectoryAndFiles()
     console.log(coolText('Running tests...'))
     // Execute the functions
     console.log(coolText('Creating directory with files...'))
     let oneFilePath = await createDirectoryWithFiles()
     let opts = { dryrun: false, rename: true, silent: true }
     console.log(coolText('Options for the tests:'))
-    Object.keys(opts).forEach((key) => {
-        console.log(coolText(`${key}: ${opts[key]}`))
-    })
-    console.log(coolText('Running detawks against one file...'))
+    console.log(coolText(opts.toString()))
+    console.log(
+        coolText(`Running detawks against one file... (${oneFilePath}))`)
+    )
     await detawks(oneFilePath, opts)
-    console.log(coolText('Running detawks with a glob...'))
-    await detawks('./test-assets/*.txt', opts)
+    let testGlob = `${dirPath}/*.md`
+    console.log(coolText(`Running detawks with a glob... (${testGlob})`))
+    await detawks(testGlob, opts)
     console.log(coolText('Running detawks against the whole test directory...'))
-    
     await detawks(dirPath, opts)
     console.log(coolText('Deleting directory and files...'))
     await deleteDirectoryAndFiles()
     console.log(coolText('Tests finished!'))
 }
-main()
+
+const withCommandLine = async () => {
+    await deleteDirectoryAndFiles()
+    console.log(coolText('Running tests with command line...'))
+    console.log(coolText('Creating directory with files...'))
+    let oneFilePath = await createDirectoryWithFiles()
+    let opts = { dryrun: false, rename: true, silent: true }
+    console.log(coolText('Options for the tests:'))
+    console.log(coolText(opts.toString()))
+    console.log(
+        coolText(`Running detawks against one file... (${oneFilePath}))`)
+    )
+    exec(
+        `detawks ${oneFilePath} --dryrun --rename --silent`,
+        (error, stdout, stderr) => {
+            if (error) {
+                console.log(`error: ${error.message}`)
+                return
+            }
+            if (stderr) {
+                console.log(`stderr: ${stderr}`)
+                return
+            }
+            console.log(stdout)
+        }
+    )
+    let testGlob = `${dirPath}/*.md`
+    console.log(coolText(`Running detawks with a glob... (${testGlob})`))
+    exec(
+        `detawks ${testGlob} --dryrun --rename --silent`,
+        (error, stdout, stderr) => {
+            if (error) {
+                console.log(`error: ${error.message}`)
+                return
+            }
+            if (stderr) {
+                console.log(`stderr: ${stderr}`)
+                return
+            }
+            console.log(stdout)
+        }
+    )
+    console.log(coolText('Running detawks against the whole test directory...'))
+    exec(
+        `detawks ${dirPath} --dryrun --rename --silent`,
+        (error, stdout, stderr) => {
+            if (error) {
+                console.log(`error: ${error.message}`)
+                return
+            }
+            if (stderr) {
+                console.log(`stderr: ${stderr}`)
+                return
+            }
+            console.log(stdout)
+        }
+    )
+    console.log(coolText('Deleting directory and files...'))
+    await deleteDirectoryAndFiles()
+    console.log(coolText('Tests finished!'))
+}
+
+testSlugify()
+withAPI()
+withCommandLine()

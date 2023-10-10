@@ -40,8 +40,8 @@ const run = async (globPattern, userOpts) => {
     }
 
     let arrayOfFilePaths = []
-    for await (let f of files) {
-        let filePathInfo = await getFilePathInfo(f)
+    for await (let file of files) {
+        let filePathInfo = await getFilePathInfo(file)
         arrayOfFilePaths.push(filePathInfo)
     }
 
