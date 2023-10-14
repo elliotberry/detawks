@@ -1,14 +1,14 @@
 #!/usr/bin/env node
-
+import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
 import detawks from './index.js'
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
-const __dirname = dirname(fileURLToPath(import.meta.url));
+import { stringModificationFunctions } from './lib/slugify.js'
+import { dirname } from 'path'
+import { fileURLToPath } from 'url'
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
 const main = async () => {
-
-    const parser = await hideBin(process.argv)
+    const parser = await yargs(hideBin(process.argv))
         .usage('Usage: $0 [options] <glob / file / dir>')
         .option('s', {
             alias: 'silent',
@@ -48,34 +48,52 @@ const main = async () => {
             describe: 'max depth',
             type: 'number',
         })
-    
+        //options to list all available string modification functions
+        .option('l', {
+            alias: 'list',
+            describe: 'list all available string modification functions',
+            type: 'boolean',
+            default: false,
+        })
         .help('h')
         .alias('h', 'help')
+
     const argv = await parser.parse()
     const globPattern = argv._[0]
-    if (!globPattern) {
-        console.log('no glob pattern provided')
-        process.exit(1)
-    }
-
-    let dryrun = argv.d
-    let directories = argv.f
-    let rename = argv.r
-    let silent = argv.s
-    let userOpts = { dryrun, directories, rename, silent }
-    if (argv.m) {
-        let maxDepth = parseInt(argv.m)
-        if (!isNaN(maxDepth)) {
-            userOpts.maxDepth = maxDepth
+    if (argv.l) {
+        for (const [key, value] of Object.entries(
+            stringModificationFunctions
+        )) {
+            let a = stringModificationFunctions[key]
+            console.log(`${a.name}${a.description ? ': ' + a.description : ''}`)
         }
-    }
-    let opts = userOpts
-    console.log(opts)
-    try {
-        //await detawks(globPattern, opts)
-    } catch (e) {
-        console.log(e.toString())
-        process.exit(1)
+
+        process.exit(0)
+    } else {
+        if (!globPattern) {
+            console.log('no glob pattern provided')
+            process.exit(1)
+        }
+
+        let dryrun = argv.d
+        let directories = argv.f
+        let rename = argv.r
+        let silent = argv.s
+        let userOpts = { dryrun, directories, rename, silent }
+        if (argv.m) {
+            let maxDepth = parseInt(argv.m)
+            if (!isNaN(maxDepth)) {
+                userOpts.maxDepth = maxDepth
+            }
+        }
+        let opts = userOpts
+        console.log(opts)
+        try {
+            //await detawks(globPattern, opts)
+        } catch (e) {
+            console.log(e.toString())
+            process.exit(1)
+        }
     }
 }
 main()

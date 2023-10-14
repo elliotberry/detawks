@@ -1,2 +1,22 @@
-IGNORES = node_modules, .git, .DS_Store
-SEQUENCE = toString, trim, doSwaps, toParamCase, lowerCase, maxChars, minChars, fallbackToRandom
+{
+    "ignores": [
+        "node_modules",
+        ".git",
+        ".DS_Store"
+    ],
+    "sequence": [
+        "toString",
+        "trim",
+        "doSwaps",
+        "toParamCase",
+        "lowerCase",
+        {
+            "name": "maxChars",
+            "args": {
+                "max": 10
+            }
+        },
+        "minChars",
+        "fallbackToRandom"
+    ]
+}
