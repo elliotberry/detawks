@@ -1,4 +1,8 @@
 {
+    "dryrun": false,
+    "directories": false,
+    "silent": true,
+    "rename": true,
     "ignores": [
         "node_modules",
         ".git",

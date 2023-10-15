@@ -2,14 +2,17 @@ import fs from 'fs'
 import path from 'path'
 import detawks from './index.js'
 import chalk from 'chalk'
-import slugify from './lib/slugify.js'
+import {slugify} from './lib/slugify.js'
 import { exec } from 'child_process'
 
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 //this part is important for the tests to run
 var coolText = chalk.bgBlue.black
 
 
-const dirPath = './test-assets'
+const dirPath = path.resolve(path.join(__dirname, 'test-assets'))
 const names = [
     'Persian',
     'Siamese',
@@ -71,6 +74,7 @@ async function deleteDirectoryAndFiles() {
 }
 
 async function createDirectoryWithFiles() {
+    await deleteDirectoryAndFiles()
     // Create directory
     await fs.promises.mkdir(dirPath)
 
@@ -103,7 +107,7 @@ async function createDirectoryWithFiles() {
 }
 
 const withAPI = async () => {
-    await deleteDirectoryAndFiles()
+
     console.log(coolText('Running tests...'))
     // Execute the functions
     console.log(coolText('Creating directory with files...'))
@@ -121,12 +125,12 @@ const withAPI = async () => {
     console.log(coolText('Running detawks against the whole test directory...'))
     await detawks(dirPath, opts)
     console.log(coolText('Deleting directory and files...'))
-    await deleteDirectoryAndFiles()
+   
     console.log(coolText('Tests finished!'))
 }
 
 const withCommandLine = async () => {
-    await deleteDirectoryAndFiles()
+
     console.log(coolText('Running tests with command line...'))
     console.log(coolText('Creating directory with files...'))
     let oneFilePath = await createDirectoryWithFiles()
@@ -182,10 +186,12 @@ const withCommandLine = async () => {
         }
     )
     console.log(coolText('Deleting directory and files...'))
-    await deleteDirectoryAndFiles()
+  
     console.log(coolText('Tests finished!'))
 }
-
-testSlugify()
-withAPI()
-withCommandLine()
+const main = async () => {
+await testSlugify()
+await withAPI()
+await withCommandLine()
+}
+main()
