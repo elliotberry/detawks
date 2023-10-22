@@ -5,17 +5,15 @@ import useFdir from './lib/useFdir.js'
 import { validateAndFormatInput } from './lib/path-validation.js'
 import logChanges from './lib/log-changes.js'
 import chalk from 'chalk'
-
-let defaultOpts = {
-    dryrun: false,
-    directories: false,
-    silent: true,
-    rename: true,
-}
+import config from './lib/rc.js'
 
 const run = async (globPattern, userOpts) => {
-    var opts = Object.assign({}, defaultOpts, userOpts)
-
+    var opts
+    if (userOpts) {
+        opts = Object.assign({}, config, userOpts)
+    } else {
+        opts = config
+    }
     global.silent = opts.silent
 
     let inputStr = await validateAndFormatInput(globPattern)

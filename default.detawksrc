@@ -1,0 +1,26 @@
+{
+    "dryrun": false,
+    "directories": false,
+    "silent": true,
+    "rename": true,
+    "ignores": [
+        "node_modules",
+        ".git",
+        ".DS_Store"
+    ],
+    "sequence": [
+        "toString",
+        "trim",
+        "doSwaps",
+        "toParamCase",
+        "lowerCase",
+        {
+            "name": "maxChars",
+            "args": {
+                "max": 10
+            }
+        },
+        "minChars",
+        "fallbackToRandom"
+    ]
+}

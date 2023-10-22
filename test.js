@@ -2,15 +2,14 @@ import fs from 'fs'
 import path from 'path'
 import detawks from './index.js'
 import chalk from 'chalk'
-import {slugify} from './lib/slugify.js'
+import { slugify } from './lib/slugify.js'
 import { exec } from 'child_process'
 
-import { fileURLToPath } from 'url';
+import { fileURLToPath } from 'url'
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 //this part is important for the tests to run
 var coolText = chalk.bgBlue.black
-
 
 const dirPath = path.resolve(path.join(__dirname, 'test-assets'))
 const names = [
@@ -34,7 +33,6 @@ const names = [
     '✨🌀🌈🐱‍👤🐱‍🚀🐱‍🐉🐱‍💻👾🎃🕺💃🎉🎲🎸🚀🌠🌌🔮💎🎭🎨🖖🌀✨',
 ]
 
-
 const testSlugify = async () => {
     const testCases = [
         {
@@ -50,13 +48,12 @@ const testSlugify = async () => {
             expected: 'hello-world',
         },
     ]
-   for await (let testCase of testCases) {
+    for await (let testCase of testCases) {
         const { input, expected } = testCase
         const actual = slugify(input)
         if (actual !== expected) {
             console.log(`expected ${expected} but got ${actual}`)
-        }
-        else {
+        } else {
             console.log(`passed test: ${input} -> ${actual}`)
         }
     }
@@ -64,7 +61,6 @@ const testSlugify = async () => {
 
 async function deleteDirectoryAndFiles() {
     try {
-
         await fs.promises.rm(dirPath, { recursive: true })
 
         console.log(coolText('deleted test dir'))
@@ -107,30 +103,25 @@ async function createDirectoryWithFiles() {
 }
 
 const withAPI = async () => {
-
     console.log(coolText('Running tests...'))
     // Execute the functions
     console.log(coolText('Creating directory with files...'))
     let oneFilePath = await createDirectoryWithFiles()
-    let opts = { dryrun: false, rename: true, silent: true }
-    console.log(coolText('Options for the tests:'))
-    console.log(coolText(opts.toString()))
     console.log(
         coolText(`Running detawks against one file... (${oneFilePath}))`)
     )
-    await detawks(oneFilePath, opts)
+    await detawks(oneFilePath)
     let testGlob = `${dirPath}/*.md`
     console.log(coolText(`Running detawks with a glob... (${testGlob})`))
-    await detawks(testGlob, opts)
+    await detawks(testGlob)
     console.log(coolText('Running detawks against the whole test directory...'))
-    await detawks(dirPath, opts)
+    await detawks(dirPath)
     console.log(coolText('Deleting directory and files...'))
-   
+
     console.log(coolText('Tests finished!'))
 }
 
 const withCommandLine = async () => {
-
     console.log(coolText('Running tests with command line...'))
     console.log(coolText('Creating directory with files...'))
     let oneFilePath = await createDirectoryWithFiles()
@@ -186,12 +177,13 @@ const withCommandLine = async () => {
         }
     )
     console.log(coolText('Deleting directory and files...'))
-  
+
     console.log(coolText('Tests finished!'))
 }
+
 const main = async () => {
-await testSlugify()
-await withAPI()
-await withCommandLine()
+    await testSlugify()
+    await withAPI()
+    await withCommandLine()
 }
 main()
