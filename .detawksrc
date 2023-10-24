@@ -17,10 +17,8 @@
         {
             "name": "maxChars",
             "args": {
-                "max": 10
+                "num": 100
             }
-        },
-        "minChars",
-        "fallbackToRandom"
+        }
     ]
 }

@@ -15,7 +15,7 @@ const run = async (globPattern, userOpts) => {
         opts = config
     }
     global.silent = opts.silent
-
+  
     let inputStr = await validateAndFormatInput(globPattern)
     let files
 

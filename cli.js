@@ -87,9 +87,9 @@ const main = async () => {
             }
         }
         let opts = userOpts
-        console.log(opts)
+
         try {
-            //await detawks(globPattern, opts)
+            await detawks(globPattern, opts)
         } catch (e) {
             console.log(e.toString())
             process.exit(1)
