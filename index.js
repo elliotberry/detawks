@@ -7,20 +7,25 @@ import logChanges from './lib/log-changes.js'
 import chalk from 'chalk'
 import config from './lib/rc.js'
 
+var debug;
+
 const run = async (globPattern, userOpts) => {
+    
     var opts
     if (userOpts) {
         opts = Object.assign({}, config, userOpts)
     } else {
         opts = config
     }
+    global.debug = opts.debug
     global.silent = opts.silent
-  
+    debug = global.debug;
+    debug && console.log(`globPattern: ${globPattern}, userOpts: ${userOpts}`)
     let inputStr = await validateAndFormatInput(globPattern)
     let files
 
     if (inputStr.type === 'directory' || inputStr.type === 'glob') {
-        files = await useFdir(inputStr.path, opts)
+        files = await useFdir(inputStr.path, opts.maxDepth, opts.directories, inputStr.type === 'glob')
     }
     //is single file
     else {
@@ -39,7 +44,7 @@ const run = async (globPattern, userOpts) => {
 
     let arrayOfFilePaths = []
     for await (let file of files) {
-        let filePathInfo = await getFilePathInfo(file)
+        let filePathInfo = await getFilePathInfo(file, opts.fixTildes)
         arrayOfFilePaths.push(filePathInfo)
     }
 
@@ -77,7 +82,7 @@ const run = async (globPattern, userOpts) => {
         for await (let file of arrayOfFilePaths) {
             await processOneFile(file, opts.rename)
         }
-        await logChanges(arrayOfFilePaths)
+       // await logChanges(arrayOfFilePaths)
     }
 }
 export default run

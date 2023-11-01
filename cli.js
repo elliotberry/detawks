@@ -55,6 +55,12 @@ const main = async () => {
             type: 'boolean',
             default: false,
         })
+        .option('x', {
+            alias: 'debug',
+            describe: 'include debug console logs',
+            type: 'boolean',
+            default: false,
+        })
         .help('h')
         .alias('h', 'help')
 
@@ -79,7 +85,8 @@ const main = async () => {
         let directories = argv.f
         let rename = argv.r
         let silent = argv.s
-        let userOpts = { dryrun, directories, rename, silent }
+        let debug = argv.x
+        let userOpts = { dryrun, directories, rename, silent, debug }
         if (argv.m) {
             let maxDepth = parseInt(argv.m)
             if (!isNaN(maxDepth)) {

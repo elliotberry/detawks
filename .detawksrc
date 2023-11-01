@@ -3,6 +3,7 @@
     "directories": false,
     "silent": true,
     "rename": true,
+    "fixTildes": true,
     "ignores": [
         "node_modules",
         ".git",
