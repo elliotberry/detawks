@@ -3,29 +3,33 @@ import ignore from './lib/ignore.js'
 import processOneFile from './lib/process-one-file.js'
 import useFdir from './lib/useFdir.js'
 import { validateAndFormatInput } from './lib/path-validation.js'
-import logChanges from './lib/log-changes.js'
+import nicelyFormattedLog from './lib/closest-parent-info.js'
 import chalk from 'chalk'
 import config from './lib/rc.js'
 
-var debug;
-
 const run = async (globPattern, userOpts) => {
-    
     var opts
     if (userOpts) {
         opts = Object.assign({}, config, userOpts)
     } else {
         opts = config
     }
-    global.debug = opts.debug
+    global.verbose = opts.verbose
     global.silent = opts.silent
-    debug = global.debug;
-    debug && console.log(`globPattern: ${globPattern}, userOpts: ${userOpts}`)
+
+    global.verbose && console.log(`DEBUG ON`)
+    global.verbose &&
+        console.log(`globPattern: ${globPattern}, userOpts: ${userOpts}`)
     let inputStr = await validateAndFormatInput(globPattern)
     let files
 
     if (inputStr.type === 'directory' || inputStr.type === 'glob') {
-        files = await useFdir(inputStr.path, opts.maxDepth, opts.directories, inputStr.type === 'glob')
+        files = await useFdir(
+            inputStr.path,
+            opts.maxDepth,
+            opts.directories,
+            inputStr.type === 'glob'
+        )
     }
     //is single file
     else {
@@ -33,13 +37,17 @@ const run = async (globPattern, userOpts) => {
     }
 
     let numberFilesFoundInGlob = files.length
-    !global.silent &&
-        console.log(
-            `found ${numberFilesFoundInGlob} files in ${inputStr.path}.`
-        )
-    if (numberFilesFoundInGlob === 0) {
-        !global.silent && console.log(`thus, exiting.`)
-        process.exit(0)
+    if (numberFilesFoundInGlob === 1) {
+        !global.silent && console.log(chalk.green(`found a file: ${inputStr.path}.`))
+    } else {
+        !global.silent &&
+            console.log(
+                chalk.green(`found ${numberFilesFoundInGlob} files in ${inputStr.path}.`)
+            )
+        if (numberFilesFoundInGlob === 0) {
+            !global.silent && console.log(chalk.orange(`thus, exiting.`))
+            process.exit(0)
+        }
     }
 
     let arrayOfFilePaths = []
@@ -56,7 +64,7 @@ const run = async (globPattern, userOpts) => {
 
     if (arrayOfFilePaths.length === 0) {
         !global.silent &&
-            console.log(`no files to rename, as all were ignored.`)
+            console.log(chalk.blue(`no files to rename, as all were ignored.`))
         process.exit(0)
     }
     !global.silent &&
@@ -71,18 +79,19 @@ const run = async (globPattern, userOpts) => {
         )
 
     if (opts.dryrun) {
-        console.log(
-            arrayOfFilePaths
-                .map((f) => {
-                    return `${f.old} -> ${f.new}`
-                })
-                .join('\n')
+        let resp = await Promise.all(
+            arrayOfFilePaths.map(async (f) => {
+                let str = await nicelyFormattedLog(f.old, f.new)
+                return str
+            })
         )
+
+        console.log(resp.join('\n'))
     } else {
         for await (let file of arrayOfFilePaths) {
             await processOneFile(file, opts.rename)
         }
-       // await logChanges(arrayOfFilePaths)
+        // await logChanges(arrayOfFilePaths)
     }
 }
 export default run

@@ -4,6 +4,7 @@
     "silent": true,
     "rename": true,
     "fixTildes": true,
+    "verbose": false,
     "ignores": [
         "node_modules",
         ".git",

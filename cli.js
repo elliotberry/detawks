@@ -3,9 +3,7 @@ import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
 import detawks from './index.js'
 import { stringModificationFunctions } from './lib/slugify.js'
-import { dirname } from 'path'
-import { fileURLToPath } from 'url'
-const __dirname = dirname(fileURLToPath(import.meta.url))
+
 
 const main = async () => {
     const parser = await yargs(hideBin(process.argv))
@@ -14,34 +12,29 @@ const main = async () => {
             alias: 'silent',
             describe:
                 'silent mode; e.g no console.log describing new file names',
-            type: 'boolean',
-            default: false,
+            type: 'boolean'
         })
         .option('v', {
             alias: 'verbose',
             describe:
                 'verbose mode; logs files renamed, as well as other useful information',
-            type: 'boolean',
-            default: false,
+            type: 'boolean'
         })
         .option('d', {
             alias: 'dryrun',
             describe: 'dry run, showing what files would be renamed',
-            type: 'boolean',
-            default: false,
+            type: 'boolean'
         })
         .option('r', {
             alias: 'rename',
             describe:
                 'if overwrite possible, rename files AUTOMAGICALLY without prompting',
-            type: 'boolean',
-            default: true,
+            type: 'boolean'
         })
         .option('D', {
             alias: 'dirs',
             describe: 'include directories',
-            type: 'boolean',
-            default: false,
+            type: 'boolean'
         })
         .option('m', {
             alias: 'max-depth',
@@ -52,14 +45,7 @@ const main = async () => {
         .option('l', {
             alias: 'list',
             describe: 'list all available string modification functions',
-            type: 'boolean',
-            default: false,
-        })
-        .option('x', {
-            alias: 'debug',
-            describe: 'include debug console logs',
-            type: 'boolean',
-            default: false,
+            type: 'boolean'
         })
         .help('h')
         .alias('h', 'help')
@@ -85,8 +71,8 @@ const main = async () => {
         let directories = argv.f
         let rename = argv.r
         let silent = argv.s
-        let debug = argv.x
-        let userOpts = { dryrun, directories, rename, silent, debug }
+        let verbose = argv.v
+        let userOpts = { verbose,dryrun, directories, rename, silent }
         if (argv.m) {
             let maxDepth = parseInt(argv.m)
             if (!isNaN(maxDepth)) {

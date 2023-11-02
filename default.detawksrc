@@ -3,9 +3,11 @@
     "directories": false,
     "silent": true,
     "rename": true,
-    
+    "fixTildes": true,
+    "verbose": false,
     "ignores": [
         "node_modules",
+        ".DS_Store",
         ".git",
         ".DS_Store"
     ],
