@@ -17,5 +17,5 @@ yarn-error.log
 .sass-cache*
 Vagrantfile
 .nvmrc
-
+build
 

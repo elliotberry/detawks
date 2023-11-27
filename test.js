@@ -40,21 +40,21 @@ const testSlugify = async () => {
             expected: 'hello-world',
         },
         {
-            input: 'Hello World',
+            input: 'Hello🐱‍🐉🐱‍💻👾🐱‍🐉🐱‍💻👾🐱‍🐉🐱‍💻👾World',
             expected: 'hello-world',
         },
         {
-            input: 'Hello World',
+            input: 'Hello_World',
             expected: 'hello-world',
         },
     ]
     for await (let testCase of testCases) {
         const { input, expected } = testCase
-        const actual = slugify(input)
+        const actual = await slugify(input)
         if (actual !== expected) {
-            console.log(`expected ${expected} but got ${actual}`)
+            console.log(chalk.red(`expected ${expected} but got ${actual}`))
         } else {
-            console.log(`passed test: ${input} -> ${actual}`)
+            console.log(chalk.green(`passed test: ${input} -> ${actual}`))
         }
     }
 }
@@ -63,9 +63,9 @@ async function deleteDirectoryAndFiles() {
     try {
         await fs.promises.rm(dirPath, { recursive: true })
 
-        console.log(coolText('deleted test dir'))
+       // console.log(coolText('deleted test dir'))
     } catch (e) {
-        console.log(coolText('no folder to delete'))
+       // console.log(coolText('no folder to delete'))
     }
 }
 

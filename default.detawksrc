@@ -15,13 +15,7 @@
         "toString",
         "trim",
         "doSwaps",
-        "toParamCase",
         "lowerCase",
-        {
-            "name": "maxChars",
-            "args": {
-                "num": 100
-            }
-        }
+        "toParamCase"
     ]
 }

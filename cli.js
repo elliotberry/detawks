@@ -3,7 +3,7 @@ import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
 import detawks from './index.js'
 import { stringModificationFunctions } from './lib/slugify.js'
-
+import chalk from "chalk"
 
 const main = async () => {
     const parser = await yargs(hideBin(process.argv))
@@ -53,7 +53,7 @@ const main = async () => {
     const argv = await parser.parse()
     const globPattern = argv._[0]
     if (argv.l) {
-        for (const [key, value] of Object.entries(
+        for (const [key] of Object.entries(
             stringModificationFunctions
         )) {
             let a = stringModificationFunctions[key]
@@ -63,7 +63,7 @@ const main = async () => {
         process.exit(0)
     } else {
         if (!globPattern) {
-            console.log('no glob pattern provided')
+            console.error(chalk.red('no file pattern provided'))
             process.exit(1)
         }
 
@@ -84,7 +84,7 @@ const main = async () => {
         try {
             await detawks(globPattern, opts)
         } catch (e) {
-            console.log(e.toString())
+            console.error(chalk.red(e))
             process.exit(1)
         }
     }
