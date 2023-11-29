@@ -15,7 +15,7 @@
     "main": "./index.js",
     "description": "An opinionated mass file renamer in node. Meant to be similar to the venerable detox unix application, but, crappier, since it's my attempt in nodejs.",
     "scripts": {
-        "test": "node ./test.js"
+        "test": "node ./test/test.js"
     },
     "repository": {
         "type": "git",
