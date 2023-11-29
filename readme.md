@@ -1,5 +1,5 @@
 ![Detawks Logo](./.github/detawks-small.jpg)
-
+[![Bare Minimum Zero-Promises Node.js Garbage Suite 2023 Certified Edition](https://github.com/elliotberry/detawks/actions/workflows/nodejs-tests.yml/badge.svg)](https://github.com/elliotberry/detawks/actions/workflows/nodejs-tests.yml)
 # D͓̽e͓̽t͓̽a͓̽w͓̽k͓̽s͓̽
 Renames files en masse so that when I scroll by them they all look uniform and pleasing.
 
