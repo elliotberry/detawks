@@ -69,8 +69,10 @@
         "singleQuote": true
     },
     "devDependencies": {
+        "chai": "^4.3.10",
         "eslint": "^8.50.0",
         "eslint-config-prettier": "^9.0.0",
+        "mocha": "^10.2.0",
         "prettier": "^3.0.3",
         "release-it": "^16.2.1"
     },

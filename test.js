@@ -4,9 +4,11 @@ import detawks from './index.js'
 import chalk from 'chalk'
 import { slugify } from './lib/slugify.js'
 import { exec } from 'child_process'
-
+import assert from 'assert'
 import { fileURLToPath } from 'url'
-
+import { expect } from 'chai'
+import { describe, it } from 'mocha'
+import test from 'node:test'
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 //this part is important for the tests to run
 var coolText = chalk.bgBlue.black
@@ -33,7 +35,7 @@ const names = [
     '✨🌀🌈🐱‍👤🐱‍🚀🐱‍🐉🐱‍💻👾🎃🕺💃🎉🎲🎸🚀🌠🌌🔮💎🎭🎨🖖🌀✨',
 ]
 
-const testSlugify = async () => {
+test('test strings', async(t) => {
     const testCases = [
         {
             input: 'Hello World',
@@ -48,16 +50,13 @@ const testSlugify = async () => {
             expected: 'hello-world',
         },
     ]
+    
     for await (let testCase of testCases) {
         const { input, expected } = testCase
         const actual = slugify(input)
-        if (actual !== expected) {
-            console.log(`expected ${expected} but got ${actual}`)
-        } else {
-            console.log(`passed test: ${input} -> ${actual}`)
-        }
+        assert.strictEqual(expected, actual)
     }
-}
+});
 
 async function deleteDirectoryAndFiles() {
     try {
@@ -121,7 +120,9 @@ const withAPI = async () => {
     console.log(coolText('Tests finished!'))
 }
 
-const withCommandLine = async () => {
+test('test command line usage for extreme error', async(t) => {
+    var failed = false
+    try {
     console.log(coolText('Running tests with command line...'))
     console.log(coolText('Creating directory with files...'))
     let oneFilePath = await createDirectoryWithFiles()
@@ -179,11 +180,9 @@ const withCommandLine = async () => {
     console.log(coolText('Deleting directory and files...'))
 
     console.log(coolText('Tests finished!'))
-}
-
-const main = async () => {
-    await testSlugify()
-    await withAPI()
-    await withCommandLine()
-}
-main()
+    } catch (e) {
+        console.error(e)
+        failed = true
+    }
+    assert.strictEqual(failed, false)
+});
