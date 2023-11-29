@@ -1,30 +1,51 @@
-![Detawks Logo](detawks-small.jpg)
+![Detawks Logo](./.github/detawks-small.jpg)
+[![Bare Minimum Zero-Promises Node.js Garbage Suite 2023 Certified Edition](https://github.com/elliotberry/detawks/actions/workflows/nodejs-tests.yml/badge.svg)](https://github.com/elliotberry/detawks/actions/workflows/nodejs-tests.yml)
+# D͓̽e͓̽t͓̽a͓̽w͓̽k͓̽s͓̽
+Renames files en masse so that when I scroll by them they all look uniform and pleasing.
 
-# Detawks
+A lazy Node.js adaptation of [detox](https://github.com/dharple/detox), tailored with personal preferences for file naming. The primary motivation was to facilitate the installation of a detox setup using `yarn`. However, at length this started to take on some arguably useful configurations.
 
-A Node.js adaptation of [detox](https://github.com/dharple/detox), tailored with personal preferences for file naming. The primary motivation was to facilitate the installation of a detox setup using `yarn`.
-
-## Defawlt Features
-
-- Replaces spaces with dashes (because dashes are great!)
-- Removes underscores.
-- Converts filenames to lowercase.
-- Transforms most accented characters to their unaccented counterparts, probably
-- Eliminates most punctuation.
-
-## NOW WITH CUSTOMIZABILITY in .rc format
-
-- Specify a sequence of functions to apply to a string. Right now, you can only specify the absurd ones I've written, but I'll add more and maybe they'll even make sense.
-- Specify a list of files and directories to ignore, glob-style.
-- Comma-delimited, please
-Example configuration:
-
+## Usage
+In your favorite terminal, run:
 ```
-IGNORES = node_modules, .git, .DS_Store
-SEQUENCE = toString, trim, doSwaps, toParamCase, lowerCase, maxChars, minChars, fallbackToRandom
+detawks <options> <glob / directory / file> 
+```
+### Options
+- `-s`: Silent mode (no console logs for new file names).
+- `-d`: Dry run (shows potential file renames without executing them).
+- `-r`: Overwrite mode (renames files automatically without prompting).
+- `-f`: Includes directories in the operation. e.g. renames those too.
+- `-m`: Specifies max depth for operations.
+
+## Config setup
+### Location
+The configuration file follows the `rc` [package conventions](https://www.npmjs.com/package/rc) - create your own config at `~/.detawksrc`. The default configuration is located at `./default.detawksrc`.
+### Example configuration:
+```
+ "ignores": [
+        "node_modules",
+        ".git",
+        ".DS_Store"
+    ],
+    "sequence": [
+        "toString",
+        "trim",
+        "doSwaps",
+        "toParamCase",
+        "lowerCase",
+        {
+            "name": "maxChars",
+            "args": {
+                "num": 100
+            }
+        }
+    ]
 ```
 
-### Sequence Functions
+Specify a sequence of functions to apply to a string. Right now, you can only specify the absurd ones I've written (see below), but I'll add more, or not. When they take arguments, you can specify them in the `args` object as shown above.
+
+## Glossary: Sequence Functions Supported
+*(see `./lib/string-modification-functions.js` for more details)*
 
 - **toParamCase**: Converts a string to param case, transforming spaces and special characters to hyphens and converting all letters to lowercase.
 - **removeInvalidChars**: Removes characters that aren't lowercase letters, numbers, spaces, or hyphens.
