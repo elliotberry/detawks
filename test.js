@@ -12,7 +12,7 @@ import test from 'node:test'
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 //this part is important for the tests to run
 var coolText = chalk.bgBlue.black
-
+var app = "node ./cli.js"
 const dirPath = path.resolve(path.join(__dirname, 'test-assets'))
 const names = [
     'Persian',
@@ -133,7 +133,7 @@ test('test command line usage for extreme error', async(t) => {
         coolText(`Running detawks against one file... (${oneFilePath}))`)
     )
     exec(
-        `detawks ${oneFilePath} --dryrun --rename --silent`,
+        `${app} ${oneFilePath} --dryrun --rename --silent`,
         (error, stdout, stderr) => {
             if (error) {
                 console.log(`error: ${error.message}`)
@@ -164,7 +164,7 @@ test('test command line usage for extreme error', async(t) => {
     )
     console.log(coolText('Running detawks against the whole test directory...'))
     exec(
-        `detawks ${dirPath} --dryrun --rename --silent`,
+        `${app} ${dirPath} --dryrun --rename --silent`,
         (error, stdout, stderr) => {
             if (error) {
                 console.log(`error: ${error.message}`)
