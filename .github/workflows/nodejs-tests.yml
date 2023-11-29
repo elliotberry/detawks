@@ -1,4 +1,4 @@
-name: Node.js Test Workflow
+name: Bare Minimum Zero-Promises Node.js Garbage Suite 2023 Certified Edition
 
 on:
   push:
