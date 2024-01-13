@@ -13,12 +13,14 @@ const main = async () => {
             describe:
                 'silent mode; e.g no console.log describing new file names',
             type: 'boolean',
+            default: false,
         })
         .option('v', {
             alias: 'verbose',
             describe:
                 'verbose mode; logs files renamed, as well as other useful information',
             type: 'boolean',
+            default: false,
         })
         .option('d', {
             alias: 'dryrun',
@@ -39,15 +41,17 @@ const main = async () => {
             describe:
                 'numbered mode: fuck all the other renaming schemes, and just numbered all files 1-??.',
         })
-        .option('D', {
+        .option('f', {
             alias: 'dirs',
             describe: 'include directories',
             type: 'boolean',
+            default: false,
         })
         .option('m', {
             alias: 'max-depth',
             describe: 'max depth',
             type: 'number',
+            default: -1,
         })
         //options to list all available string modification functions
         .option('l', {
@@ -59,7 +63,14 @@ const main = async () => {
         .alias('h', 'help')
 
     const argv = await parser.parse()
-    const globPattern = argv._[0]
+    let globPattern;
+
+    if (argv._.length === 1) {
+        globPattern = argv._[0]
+    }
+    else {
+        globPattern = argv._
+    }
     if (argv.l) {
         for (const [key] of Object.entries(stringModificationFunctions)) {
             let a = stringModificationFunctions[key]
@@ -94,10 +105,8 @@ const main = async () => {
             }
         }
         let opts = userOpts
-
-      
-            await detawks(globPattern, opts)
-      
+        //console.log(argv)
+        await detawks(globPattern, opts)
     }
 }
 main()

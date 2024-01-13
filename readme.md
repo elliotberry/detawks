@@ -11,11 +11,13 @@ In your favorite terminal, run:
 detawks <options> <glob / directory / file> 
 ```
 ### Options
-- `-s`: Silent mode (no console logs for new file names).
-- `-d`: Dry run (shows potential file renames without executing them).
-- `-r`: Overwrite mode (renames files automatically without prompting).
-- `-f`: Includes directories in the operation. e.g. renames those too.
-- `-m`: Specifies max depth for operations.
+- `-s, --silent`: Silent mode (no console logs for new file names).
+- `-d, --dryrun`: Dry run (shows potential file renames without executing them).
+- `-f, --dirs`: Includes directories in the operation. e.g. renames those too.
+- `-n, --numbered`: Just rename everything to an integer; 1-????.
+- `-m, --max-depth`: Specifies max depth for operations.
+- `-l, --list`: List all possible string operations.
+- `-h, --help`: Show something approximating this, if I remember to update it.
 
 ## Config setup
 ### Location

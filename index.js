@@ -57,9 +57,10 @@ const run = async (globPattern, userOpts) => {
     let inputStr = await validateAndFormatInput(globPattern)
     console.log(`inputStr: ${JSON.stringify(inputStr)}`)
     let files
-
-    if (inputStr.type === 'directory' || inputStr.type === 'glob') {
-       console.log(`inputStr.type: ${inputStr.path}`)
+    if (inputStr.type === 'fileArray') {
+        files = inputStr.files
+    }
+    else if (inputStr.type === 'directory' || inputStr.type === 'glob') {
         files = await useFdir(
             inputStr.path,
             opts.maxDepth,
