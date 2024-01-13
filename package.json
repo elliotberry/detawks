@@ -38,7 +38,7 @@
     },
     "type": "module",
     "author": "ɛʟʟɨօȶ b",
-    "license": "Unlicense",
+    "license": "The Unlicense",
     "dependencies": {
         "chalk": "^5.3.0",
         "change-case": "^5.0.2",
