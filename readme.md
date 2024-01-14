@@ -10,6 +10,15 @@ In your favorite terminal, run:
 ```
 detawks <options> <glob / directory / file> 
 ```
+
+### Example
+`detawks ./*.zip`
+
+```
+BIG OLD FILENAME.zip -> big-old-filename.zip
+я компьютерный файл.zip -> blahblah.zip 
+camelCase.zip -> camelcase.zip
+``` 
 ### Options
 - `-s, --silent`: Silent mode (no console logs for new file names).
 - `-d, --dryrun`: Dry run (shows potential file renames without executing them).
@@ -85,4 +94,4 @@ detawks <options> <glob / directory / file>
 
 Special thanks to this contributor: [https://gist.github.com/codeguy/6684588](https://gist.github.com/codeguy/6684588)
 
-- I LOVE fdir. It's a great library. Check it out: [https://github.com/thecodrr/fdir](github link)
+fdir is a great library for file stuff. Check it out: [https://github.com/thecodrr/fdir](github link)
