@@ -1,0 +1,95 @@
+.\" generated with Ronn-NG/v0.10.1
+.\" http://github.com/apjanke/ronn-ng/tree/0.10.1
+.TH "DETAWKS" "1" "February 2024" ""
+.SH "NAME"
+\fBDetawks\fR \- Renames files en masse
+.SH "SYNOPSIS"
+\fBdetawks\fR \fIOPTIONS\fR <glob / directory / file>
+.SH "DESCRIPTION"
+Detawks is a lazy Node\.js adaptation of detox, tailored with personal preferences for file naming\. Its primary motivation is to facilitate the installation of a detox setup using yarn, adding arguably useful configurations\.
+.SH "EXAMPLES"
+.nf
+detawks \./*\.zip
+.fi
+.P
+This will result in:
+.IP "" 4
+.nf
+BIG OLD FILENAME\.zip \-> big\-old\-filename\.zip
+я компьютерный файл\.zip \-> blahblah\.zip
+camelCase\.zip \-> camelcase\.zip
+.fi
+.IP "" 0
+.SH "OPTIONS"
+.TP
+\fB\-s\fR, \fB\-\-silent\fR
+Silent mode (no console logs for new file names)\.
+.TP
+\fB\-d\fR, \fB\-\-dryrun\fR
+Dry run (shows potential file renames without executing them)\.
+.TP
+\fB\-f\fR, \fB\-\-dirs\fR
+Includes directories in the operation, e\.g\., renames those too\.
+.TP
+\fB\-n\fR, \fB\-\-numbered\fR
+Rename everything to an integer; 1\-????\.
+.TP
+\fB\-m\fR, \fB\-\-max\-depth\fR
+Specifies max depth for operations\.
+.TP
+\fB\-l\fR, \fB\-\-list\fR
+List all possible string operations\.
+.TP
+\fB\-h\fR, \fB\-\-help\fR
+Show help information\.
+.SH "CONFIGURATION"
+The configuration file follows the rc package conventions\. Create your own config at \fB~/\.detawksrc\fR\. The default configuration is located at \fB\./default\.detawksrc\fR\.
+.SS "Example configuration"
+.nf
+"ignores": [
+  "node_modules",
+  "\.git",
+  "\.DS_Store"
+],
+"sequence": [
+  "toString",
+  "trim",
+  "doSwaps",
+  "toParamCase",
+  "lowerCase",
+  {
+    "name": "maxChars",
+    "args": {
+      "num": 100
+    }
+  }
+]
+.fi
+.SH "SEQUENCE FUNCTIONS SUPPORTED"
+.IP "\(bu" 4
+\fBtoParamCase\fR: Converts a string to param case\.
+.IP "\(bu" 4
+\fBremoveInvalidChars\fR: Removes invalid characters\.
+.IP "\(bu" 4
+\fBtoString\fR: Ensures input is a string\.
+.IP "\(bu" 4
+\fBtrim\fR: Removes leading and trailing whitespace\.
+.IP "\(bu" 4
+\fBlowerCase\fR: Converts the string to lowercase\.
+.IP "\(bu" 4
+\fBreplaceWhiteSpace\fR: Replaces whitespace with a specified character\.
+.IP "\(bu" 4
+\fBmaxChars\fR: Truncates the string to a maximum length\.
+.IP "\(bu" 4
+\fBminChars\fR: Removes characters from the start\.
+.IP "\(bu" 4
+\fBremoveConsecutiveDashes\fR: Replaces consecutive dashes with a single dash\.
+.IP "\(bu" 4
+\fBfallbackToRandom\fR: Returns a random string if the input is empty\.
+.IP "" 0
+.SH "ACKNOWLEDGEMENTS"
+Special thanks to the contributor: codeguy's gist \fIhttps://gist\.github\.com/codeguy/6684588\fR
+.P
+Check out fdir for file operations: fdir library \fIhttps://github\.com/thecodrr/fdir\fR
+.P
+Detawks(1)
