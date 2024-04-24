@@ -25,7 +25,7 @@ const logIgnored = (arrayOfFilePaths, lengthBefore, opts, files) => {
         )
 }
 const filesFoundInfo = (files, inputStr) => {
-    let numberFilesFoundInGlob = files.length
+    const numberFilesFoundInGlob = files.length
     if (numberFilesFoundInGlob === 1) {
         !global.silent && console.log(chalk.green(`found a file: ${files[0]}.`))
     } else {
@@ -42,20 +42,14 @@ const filesFoundInfo = (files, inputStr) => {
     }
 }
 const run = async (globPattern, userOpts) => {
-    var opts
-    if (userOpts) {
-        opts = Object.assign({}, config, userOpts)
-    } else {
-        opts = config
-    }
+    const opts = userOpts ? Object.assign({}, config, userOpts) : config;
     global.verbose = opts.verbose
     global.silent = opts.silent
 
     global.verbose && console.log(`DEBUG ON`)
     global.verbose &&
         console.log(`globPattern: ${globPattern}, userOpts: ${userOpts}`)
-    let inputStr = await validateAndFormatInput(globPattern)
-    console.log(`inputStr: ${JSON.stringify(inputStr)}`)
+    const inputStr = await validateAndFormatInput(globPattern)
     let files
     if (inputStr.type === 'fileArray') {
         files = inputStr.files
@@ -79,8 +73,8 @@ const run = async (globPattern, userOpts) => {
     //get pending new/old filepaths given our current options loadout
     let arrayOfFilePaths = []
     let fileNumber = 1
-    for await (let file of files) {
-        let filePathInfo = await getFilePathInfo(
+    for await (const file of files) {
+        const filePathInfo = await getFilePathInfo(
             file,
             opts.fixTildes,
             opts.numbered ? fileNumber++ : null
@@ -92,17 +86,17 @@ const run = async (globPattern, userOpts) => {
     //bugfix
     arrayOfFilePaths = arrayOfFilePaths.filter((f) => f !== null)
 
-    let lengthBefore = arrayOfFilePaths.length
+    const lengthBefore = arrayOfFilePaths.length
     arrayOfFilePaths = await ignore(arrayOfFilePaths)
     logIgnored(arrayOfFilePaths, lengthBefore, opts, files)
 
     if (opts.dryrun) {
-        for await (let fileShit of arrayOfFilePaths) {
+        for await (const fileShit of arrayOfFilePaths) {
             await baseLog(fileShit)
         }
         //  console.log(resp.join('\n'))
     } else {
-        for await (let file of arrayOfFilePaths) {
+        for await (const file of arrayOfFilePaths) {
             await processOneFile(file, opts.rename)
             await baseLog(file)
         }
