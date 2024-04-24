@@ -1,9 +1,10 @@
 #!/usr/bin/env node
+import chalk from 'chalk'
 import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
+
 import detawks from './index.js'
 import { stringModificationFunctions } from './lib/slugify.js'
-import chalk from 'chalk'
 
 const main = async () => {
     const parser = await yargs(hideBin(process.argv))
@@ -63,18 +64,13 @@ const main = async () => {
         .alias('h', 'help')
 
     const argv = await parser.parse()
-    let globPattern;
+    let globPattern
 
-    if (argv._.length === 1) {
-        globPattern = argv._[0]
-    }
-    else {
-        globPattern = argv._
-    }
+    globPattern = argv._.length === 1 ? argv._[0] : argv._
     if (argv.l) {
         for (const [key] of Object.entries(stringModificationFunctions)) {
-            let a = stringModificationFunctions[key]
-            console.log(`${a.name}${a.description ? ': ' + a.description : ''}`)
+            const a = stringModificationFunctions[key]
+            console.log(`${a.name}${a.description ? `: ${a.description}` : ''}`)
         }
 
         process.exit(0)
@@ -84,13 +80,13 @@ const main = async () => {
             process.exit(1)
         }
 
-        let dryrun = argv.d
-        let directories = argv.f
-        let rename = argv.r
-        let silent = argv.s
-        let verbose = argv.v
-        let numbered = argv.n
-        let userOpts = {
+        const dryrun = argv.d
+        const directories = argv.f
+        const rename = argv.r
+        const silent = argv.s
+        const verbose = argv.v
+        const numbered = argv.n
+        const userOptions = {
             numbered,
             verbose,
             dryrun,
@@ -99,14 +95,14 @@ const main = async () => {
             silent,
         }
         if (argv.m) {
-            let maxDepth = parseInt(argv.m)
-            if (!isNaN(maxDepth)) {
-                userOpts.maxDepth = maxDepth
+            const maxDepth = Number.parseInt(argv.m)
+            if (!Number.isNaN(maxDepth)) {
+                userOptions.maxDepth = maxDepth
             }
         }
-        let opts = userOpts
+        const options = userOptions
         //console.log(argv)
-        await detawks(globPattern, opts)
+        await detawks(globPattern, options)
     }
 }
 main()

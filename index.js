@@ -1,17 +1,18 @@
+import chalk from 'chalk'
+
+import { baseLog } from './lib/closest-parent-info.js'
 import getFilePathInfo from './lib/file-path-info.js'
 import ignore from './lib/ignore.js'
-import processOneFile from './lib/process-one-file.js'
-import useFdir from './lib/useFdir.js'
 import { validateAndFormatInput } from './lib/path-validation.js'
-import { baseLog } from './lib/closest-parent-info.js'
-import chalk from 'chalk'
+import processOneFile from './lib/process-one-file.js'
 import config from './lib/rc.js'
+import useFdir from './lib/useFdir.js'
 
-const logIgnored = (arrayOfFilePaths, lengthBefore, opts, files) => {
+const logIgnored = (arrayOfFilePaths, lengthBefore, options, files) => {
     if (arrayOfFilePaths.length === 0) {
         !global.silent &&
             console.log(chalk.blue(`no files to rename, as all were ignored.`))
-        process.exit(0)
+        throw new Error('no files to rename.')
     }
     !global.silent &&
         console.log(`ignored ${lengthBefore - arrayOfFilePaths.length} files.`)
@@ -19,12 +20,12 @@ const logIgnored = (arrayOfFilePaths, lengthBefore, opts, files) => {
         console.log(
             chalk.blue(
                 `${arrayOfFilePaths.length}/${files.length} ${
-                    opts.dryrun ? `would` : `will`
+                    options.dryrun ? `would` : `will`
                 } be renamed.`
             )
         )
 }
-const filesFoundInfo = (files, inputStr) => {
+const filesFoundInfo = (files, inputString) => {
     const numberFilesFoundInGlob = files.length
     if (numberFilesFoundInGlob === 1) {
         !global.silent && console.log(chalk.green(`found a file: ${files[0]}.`))
@@ -32,43 +33,47 @@ const filesFoundInfo = (files, inputStr) => {
         !global.silent &&
             console.log(
                 chalk.green(
-                    `found ${numberFilesFoundInGlob} files in ${inputStr.path}.`
+                    `found ${numberFilesFoundInGlob} files in ${inputString.path}.`
                 )
             )
         if (numberFilesFoundInGlob === 0) {
             !global.silent && console.log(chalk.red(`thus, exiting.`))
-            process.exit(0)
+            throw new Error('no files found.')
         }
     }
 }
-const run = async (globPattern, userOpts) => {
-    const opts = userOpts ? Object.assign({}, config, userOpts) : config;
-    global.verbose = opts.verbose
-    global.silent = opts.silent
+const run = async (globPattern, userOptions) => {
+    const options = userOptions
+        ? Object.assign({}, config, userOptions)
+        : config
+    global.verbose = options.verbose
+    global.silent = options.silent
 
     global.verbose && console.log(`DEBUG ON`)
     global.verbose &&
-        console.log(`globPattern: ${globPattern}, userOpts: ${userOpts}`)
-    const inputStr = await validateAndFormatInput(globPattern)
+        console.log(`globPattern: ${globPattern}, userOpts: ${userOptions}`)
+    const inputString = await validateAndFormatInput(globPattern)
     let files
-    if (inputStr.type === 'fileArray') {
-        files = inputStr.files
-    }
-    else if (inputStr.type === 'directory' || inputStr.type === 'glob') {
+    if (inputString.type === 'fileArray') {
+        files = inputString.files
+    } else if (
+        inputString.type === 'directory' ||
+        inputString.type === 'glob'
+    ) {
         files = await useFdir(
-            inputStr.path,
-            opts.maxDepth,
-            opts.directories,
-            inputStr.type === 'glob'
+            inputString.path,
+            options.maxDepth,
+            options.directories,
+            inputString.type === 'glob'
         )
     }
     //is single file
     else {
-        files = [inputStr.path]
+        files = [inputString.path]
     }
 
     //console log that we got some shit to process.
-    filesFoundInfo(files, inputStr)
+    filesFoundInfo(files, inputString)
 
     //get pending new/old filepaths given our current options loadout
     let arrayOfFilePaths = []
@@ -76,8 +81,8 @@ const run = async (globPattern, userOpts) => {
     for await (const file of files) {
         const filePathInfo = await getFilePathInfo(
             file,
-            opts.fixTildes,
-            opts.numbered ? fileNumber++ : null
+            options.fixTildes,
+            options.numbered ? fileNumber++ : null
         )
 
         arrayOfFilePaths.push(filePathInfo)
@@ -88,16 +93,16 @@ const run = async (globPattern, userOpts) => {
 
     const lengthBefore = arrayOfFilePaths.length
     arrayOfFilePaths = await ignore(arrayOfFilePaths)
-    logIgnored(arrayOfFilePaths, lengthBefore, opts, files)
+    logIgnored(arrayOfFilePaths, lengthBefore, options, files)
 
-    if (opts.dryrun) {
+    if (options.dryrun) {
         for await (const fileShit of arrayOfFilePaths) {
             await baseLog(fileShit)
         }
         //  console.log(resp.join('\n'))
     } else {
         for await (const file of arrayOfFilePaths) {
-            await processOneFile(file, opts.rename)
+            await processOneFile(file, options.rename)
             await baseLog(file)
         }
         // await logChanges(arrayOfFilePaths)
