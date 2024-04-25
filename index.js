@@ -1,5 +1,3 @@
-import chalk from 'chalk'
-
 import { baseLog } from './lib/closest-parent-info.js'
 import getFilePathInfo from './lib/file-path-info.js'
 import ignore from './lib/ignore.js'
@@ -11,33 +9,29 @@ import useFdir from './lib/useFdir.js'
 const logIgnored = (arrayOfFilePaths, lengthBefore, options, files) => {
     if (arrayOfFilePaths.length === 0) {
         !global.silent &&
-            console.log(chalk.blue(`no files to rename, as all were ignored.`))
+            console.log(`no files to rename, as all were ignored.`)
         throw new Error('no files to rename.')
     }
     !global.silent &&
         console.log(`ignored ${lengthBefore - arrayOfFilePaths.length} files.`)
     !global.silent &&
         console.log(
-            chalk.blue(
-                `${arrayOfFilePaths.length}/${files.length} ${
-                    options.dryrun ? `would` : `will`
-                } be renamed.`
-            )
+            `${arrayOfFilePaths.length}/${files.length} ${
+                options.dryrun ? `would` : `will`
+            } be renamed.`
         )
 }
 const filesFoundInfo = (files, inputString) => {
     const numberFilesFoundInGlob = files.length
     if (numberFilesFoundInGlob === 1) {
-        !global.silent && console.log(chalk.green(`found a file: ${files[0]}.`))
+        !global.silent && console.log(`found a file: ${files[0]}.`)
     } else {
         !global.silent &&
             console.log(
-                chalk.green(
-                    `found ${numberFilesFoundInGlob} files in ${inputString.path}.`
-                )
+                `found ${numberFilesFoundInGlob} files in ${inputString.path}.`
             )
         if (numberFilesFoundInGlob === 0) {
-            !global.silent && console.log(chalk.red(`thus, exiting.`))
+            !global.silent && console.log(`thus, exiting.`)
             throw new Error('no files found.')
         }
     }
@@ -105,7 +99,6 @@ const run = async (globPattern, userOptions) => {
             await processOneFile(file, options.rename)
             await baseLog(file)
         }
-        // await logChanges(arrayOfFilePaths)
     }
 }
 export default run

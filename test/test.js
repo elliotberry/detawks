@@ -1,64 +1,33 @@
-import fs from 'fs'
-import path from 'path'
-import detawks from '../index.js'
-import chalk from 'chalk'
-import { slugify } from '../lib/slugify.js'
-import { exec } from 'node:child_process'
 import assert from 'assert'
-import { fileURLToPath } from 'url'
-import { expect } from 'chai'
-import { describe, it } from 'mocha'
+import chalk from 'chalk'
+import fs from 'node:fs'
+import  execa  from 'elliotisms/lib/exec.js'
 import test from 'node:test'
+import path from 'path'
+
 import __dirname from '../lib/__dirname.js'
+import { slugify } from '../lib/slugify.js'
 import { createDirectoryWithFiles } from './createDirectoryWithFiles.js'
+
 export async function deleteDirectoryAndFiles() {
     try {
         await fs.promises.rm(dirPath, { recursive: true })
 
-        console.log(coolText('deleted test dir'))
-    } catch (e) {
+        console.log('deleted test dir')
+    } catch {
         //  console.log(coolText('no folder to delete'))
     }
 }
-export const coolText = chalk.bgBlue.black //this part is important for the tests to run
-export const dirPath = path.resolve(path.join(__dirname, 'test-assets'))
-export const names = [
-    'Persian',
-    'Siamese',
-    'Maine Coon',
-    'Ragdoll',
-    'Sphynx',
-    'Bengal',
-    'Abyssinian',
-    'British Shorthair',
-    'Scottish Fold',
-    'Burmese',
-    'Oriental',
-    'Siberian',
-    'Tonkinese',
-    'Russian Blue',
-    'Norwegian Forest',
-    'кошки',
-    'பூனைகள்',
-    '✨🌀🌈🐱‍👤🐱‍🚀🐱‍🐉🐱‍💻👾🎃🕺💃🎉🎲🎸🚀🌠🌌🔮💎🎭🎨🖖🌀✨',
-]
 
+export const dirPath = path.resolve(path.join(__dirname, 'test-assets'))
+console.log(dirPath)
 const main = async () => {
-    const execa = async (cmd) =>
-        new Promise((resolve, reject) => {
-            exec(cmd, (error, stdout, stderr) => {
-                if (error || stderr) {
-                    throw new Error(error || stderr)
-                }
-                resolve(stdout)
-            })
-        })
     const app = 'node ./cli.js'
 
     //a function that returns true if the string contains no non-ascii characters and npo underscores
-    function noNonASCIIChars(str) {
-        for (let i = 0; i < str.length; i++) {
-            const charCode = str.charCodeAt(i)
+    function noNonASCIIChars(string_) {
+        for (let index = 0; index < string_.length; index++) {
+            const charCode = string_.charCodeAt(index)
             if (charCode > 127 || charCode === 95) {
                 return false
             }
@@ -71,8 +40,8 @@ const main = async () => {
         try {
             let oneFilePath = await createDirectoryWithFiles()
             await execa(`${app} "${oneFilePath}" --dryrun --rename --silent`)
-        } catch (e) {
-            console.error(e)
+        } catch (error) {
+            console.error(error)
             failed = true
         }
         assert.strictEqual(failed, false)
@@ -93,8 +62,8 @@ const main = async () => {
             let files = await fs.promises.readdir(dirPath)
             //filter out files
             console.log(files)
-        } catch (e) {
-            console.error(e)
+        } catch (error) {
+            console.error(error)
             failed = true
         }
         assert.strictEqual(failed, false)
@@ -106,9 +75,9 @@ const main = async () => {
             console.log(coolText('Running tests with command line...'))
             console.log(coolText('Creating directory with files...'))
             let oneFilePath = await createDirectoryWithFiles()
-            let opts = { dryrun: false, rename: true, silent: true }
+            let options = { dryrun: false, rename: true, silent: true }
             console.log(coolText('Options for the tests:'))
-            console.log(coolText(opts.toString()))
+            console.log(coolText(options.toString()))
             console.log(
                 coolText(
                     `Running detawks against one file... (${oneFilePath}))`
@@ -126,8 +95,8 @@ const main = async () => {
             console.log(coolText('Deleting directory and files...'))
 
             console.log(coolText('Tests finished!'))
-        } catch (e) {
-            console.error(e)
+        } catch (error) {
+            console.error(error)
             failed = true
         }
         assert.strictEqual(failed, false)
@@ -136,24 +105,24 @@ const main = async () => {
     await test('test basic string replacement', async (t) => {
         const testCases = [
             {
-                input: 'Hello World',
                 expected: 'hello-world',
+                input: 'Hello World',
             },
             {
-                input: 'Hello World',
                 expected: 'hello-world',
+                input: 'Hello World',
             },
             {
-                input: 'Hello World',
                 expected: 'hello-world',
+                input: 'Hello World',
             },
         ]
 
         for await (let testCase of testCases) {
-            const { input, expected } = testCase
+            const { expected, input } = testCase
             const actual = await slugify(input)
             assert.strictEqual(expected, actual)
         }
     })
 }
-main()
+

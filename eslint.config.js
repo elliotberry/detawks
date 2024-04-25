@@ -1,15 +1,15 @@
-import stylistic from '@stylistic/eslint-plugin'
 import pluginImport from 'eslint-plugin-import'
 import perfectionistNatural from 'eslint-plugin-perfectionist/configs/recommended-natural'
 import prettierConfig from 'eslint-plugin-prettier/recommended'
 import promise from 'eslint-plugin-promise'
 import is from 'eslint-plugin-simple-import-sort'
 import eslintPluginUnicorn from 'eslint-plugin-unicorn'
+
 export default [
     prettierConfig,
     eslintPluginUnicorn.configs['flat/recommended'],
     perfectionistNatural,
-    stylistic.configs['recommended-flat'],
+
     {
         files: ['**/*.js'],
         languageOptions: {
@@ -20,8 +20,7 @@ export default [
             import: pluginImport,
             pluginImport,
             promise,
-            'simple-import-sort': is
-          
+            'simple-import-sort': is,
         },
 
         rules: {

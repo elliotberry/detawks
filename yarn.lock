@@ -1076,6 +1076,11 @@ electron-to-chromium@^1.4.668:
   resolved "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.4.747.tgz#e37fa5b7b7e4c22607c5f59b5cf78f947266e77d"
   integrity sha512-+FnSWZIAvFHbsNVmUxhEqWiaOiPMcfum1GQzlWCg/wLigVtshOsjXHyEFfmt6cFK6+HkS3QOJBv6/3OPumbBfw==
 
+elliotisms@^0.0.14:
+  version "0.0.14"
+  resolved "https://registry.npmjs.org/elliotisms/-/elliotisms-0.0.14.tgz#b87f733a7b1014be0ca08fa357ee2b93d683eb19"
+  integrity sha512-NEheJmioYy/dxXW3MzfFLVYpa21sQXxaje8P4xrsbF/WT7cskIPF9gJKgnJ7r4aOpV+QrVB7m1ksJukRB4uH+w==
+
 emoji-regex@^10.3.0:
   version "10.3.0"
   resolved "https://registry.npmjs.org/emoji-regex/-/emoji-regex-10.3.0.tgz#76998b9268409eb3dae3de989254d456e70cfe23"
@@ -1315,6 +1320,11 @@ eslint-plugin-promise@^6.1.1:
   version "6.1.1"
   resolved "https://registry.npmjs.org/eslint-plugin-promise/-/eslint-plugin-promise-6.1.1.tgz#269a3e2772f62875661220631bd4dafcb4083816"
   integrity sha512-tjqWDwVZQo7UIPMeDReOpUgHCmCiH+ePnVT+5zVapL0uuHnegBUs2smM13CzOs2Xb5+MHMRFTs9v24yjba4Oig==
+
+eslint-plugin-security-node@^1.1.4:
+  version "1.1.4"
+  resolved "https://registry.npmjs.org/eslint-plugin-security-node/-/eslint-plugin-security-node-1.1.4.tgz#e78dbfa9d4852076d51ca512a28d6b4ead069792"
+  integrity sha512-8+agTMb2glNbP1zFhqo/Ixwtz16Hn0TvJW5KgpoHkAzGjDUhQf9iT+D6OgbhvZCMWRKMjc+5FbJ2Lh0UEUz7fQ==
 
 eslint-plugin-simple-import-sort@^12.1.0:
   version "12.1.0"

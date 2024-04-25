@@ -1,7 +1,35 @@
 import fs from 'fs';
 import path from 'path';
-import { deleteDirectoryAndFiles, dirPath, names, coolText } from './test.js';
+import { deleteDirectoryAndFiles, dirPath } from './test.js';
+async function deleteDirectoryAndFiles() {
+    try {
+        await fs.promises.rm(dirPath, { recursive: true })
 
+        console.log('deleted test dir')
+    } catch {
+        //  console.log(coolText('no folder to delete'))
+    }
+}
+export const names = [
+    'Persian',
+    'Siamese',
+    'Maine Coon',
+    'Ragdoll',
+    'Sphynx',
+    'Bengal',
+    'Abyssinian',
+    'British Shorthair',
+    'Scottish Fold',
+    'Burmese',
+    'Oriental',
+    'Siberian',
+    'Tonkinese',
+    'Russian Blue',
+    'Norwegian Forest',
+    'кошки',
+    'பூனைகள்',
+    '✨🌀🌈🐱‍👤🐱‍🚀🐱‍🐉🐱‍💻👾🎃🕺💃🎉🎲🎸🚀🌠🌌🔮💎🎭🎨🖖🌀✨',
+]
 export async function createDirectoryWithFiles() {
     await deleteDirectoryAndFiles();
     // Create directory
