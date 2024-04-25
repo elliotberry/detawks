@@ -28,7 +28,7 @@ const filesFoundInfo = (files, inputString) => {
     } else {
         !global.silent &&
             console.log(
-                `found ${numberFilesFoundInGlob} files in ${inputString.path}.`
+                `found ${numberFilesFoundInGlob} files in ${inputString.path ? inputString.path : `'${inputString.input}'`}.`
             )
         if (numberFilesFoundInGlob === 0) {
             !global.silent && console.log(`thus, exiting.`)

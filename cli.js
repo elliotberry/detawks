@@ -11,48 +11,42 @@ const main = async () => {
         .usage('Usage: $0 [options] <glob / file / dir>')
         .option('s', {
             alias: 'silent',
+            default: false,
             describe:
                 'silent mode; e.g no console.log describing new file names',
             type: 'boolean',
-            default: false,
         })
         .option('v', {
             alias: 'verbose',
+            default: false,
             describe:
                 'verbose mode; logs files renamed, as well as other useful information',
             type: 'boolean',
-            default: false,
         })
         .option('d', {
             alias: 'dryrun',
+            default: false,
             describe: 'dry run, showing what files would be renamed',
             type: 'boolean',
         })
         .option('r', {
             alias: 'rename',
+            default: true,
             describe:
-                'if overwrite possible, rename files AUTOMAGICALLY without prompting',
+                'if overwrite is possible, rename files AUTOMAGICALLY without prompting',
             type: 'boolean',
-        })
-        .option('n', {
-            alias: 'numbered',
-
-            type: 'boolean',
-            default: false,
-            describe:
-                'numbered mode: fuck all the other renaming schemes, and just numbered all files 1-??.',
         })
         .option('f', {
             alias: 'dirs',
+            default: false,
             describe: 'include directories',
             type: 'boolean',
-            default: false,
         })
         .option('m', {
             alias: 'max-depth',
+            default: -1,
             describe: 'max depth',
             type: 'number',
-            default: -1,
         })
         //options to list all available string modification functions
         .option('l', {
@@ -71,6 +65,7 @@ const main = async () => {
         for (const [key] of Object.entries(stringModificationFunctions)) {
             const a = stringModificationFunctions[key]
             console.log(`${a.name}${a.description ? `: ${a.description}` : ''}`)
+            
         }
 
         process.exit(0)
@@ -85,14 +80,14 @@ const main = async () => {
         const rename = argv.r
         const silent = argv.s
         const verbose = argv.v
-        const numbered = argv.n
+ 
         const userOptions = {
-            numbered,
-            verbose,
-            dryrun,
             directories,
+            dryrun,
+            numbered,
             rename,
             silent,
+            verbose,
         }
         if (argv.m) {
             const maxDepth = Number.parseInt(argv.m)
@@ -101,7 +96,7 @@ const main = async () => {
             }
         }
         const options = userOptions
-        //console.log(argv)
+
         await detawks(globPattern, options)
     }
 }

@@ -1,29 +1,16 @@
 import assert from 'assert'
-import chalk from 'chalk'
+import execa from 'elliotisms/lib/exec.js'
 import fs from 'node:fs'
-import  execa  from 'elliotisms/lib/exec.js'
 import test from 'node:test'
 import path from 'path'
 
 import __dirname from '../lib/__dirname.js'
 import { slugify } from '../lib/slugify.js'
-import { createDirectoryWithFiles } from './createDirectoryWithFiles.js'
+import createDirectoryWithFiles from './createDirectoryWithFiles.js'
 
-export async function deleteDirectoryAndFiles() {
-    try {
-        await fs.promises.rm(dirPath, { recursive: true })
-
-        console.log('deleted test dir')
-    } catch {
-        //  console.log(coolText('no folder to delete'))
-    }
-}
-
-export const dirPath = path.resolve(path.join(__dirname, 'test-assets'))
-console.log(dirPath)
+const dirPath = path.resolve(path.join(__dirname, 'test-assets'))
+const app = 'node ./cli.js'
 const main = async () => {
-    const app = 'node ./cli.js'
-
     //a function that returns true if the string contains no non-ascii characters and npo underscores
     function noNonASCIIChars(string_) {
         for (let index = 0; index < string_.length; index++) {
@@ -126,3 +113,11 @@ const main = async () => {
     })
 }
 
+const manualTest = async () => {
+    await createDirectoryWithFiles()
+    await execa(
+        `${app} "/Users/eberry/projects/___MY-SCRIPTS/detawks/test-assets" --dryrun`
+    )
+}
+
+manualTest()

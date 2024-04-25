@@ -8,8 +8,7 @@
     "ignores": [
         "node_modules",
         ".DS_Store",
-        ".git",
-        ".DS_Store"
+        ".git"
     ],
     "sequence": [
         "toString",

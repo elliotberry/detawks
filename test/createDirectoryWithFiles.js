@@ -1,6 +1,8 @@
 import fs from 'fs';
 import path from 'path';
-import { deleteDirectoryAndFiles, dirPath } from './test.js';
+import __dirname from '../lib/__dirname.js'
+
+const dirPath = path.resolve(path.join(__dirname, 'test-assets'))
 async function deleteDirectoryAndFiles() {
     try {
         await fs.promises.rm(dirPath, { recursive: true })
@@ -30,7 +32,7 @@ export const names = [
     'பூனைகள்',
     '✨🌀🌈🐱‍👤🐱‍🚀🐱‍🐉🐱‍💻👾🎃🕺💃🎉🎲🎸🚀🌠🌌🔮💎🎭🎨🖖🌀✨',
 ]
-export async function createDirectoryWithFiles() {
+async function createDirectoryWithFiles() {
     await deleteDirectoryAndFiles();
     // Create directory
     await fs.promises.mkdir(dirPath);
@@ -59,6 +61,8 @@ export async function createDirectoryWithFiles() {
             oneFilePath = filePath;
         }
     }
-    console.log(coolText(`created ${testFilesMade} test files`));
+    console.log(`created ${testFilesMade} test files`)
     return oneFilePath;
 }
+
+export default createDirectoryWithFiles
