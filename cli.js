@@ -65,7 +65,6 @@ const main = async () => {
         for (const [key] of Object.entries(stringModificationFunctions)) {
             const a = stringModificationFunctions[key]
             console.log(`${a.name}${a.description ? `: ${a.description}` : ''}`)
-            
         }
 
         process.exit(0)
@@ -80,7 +79,7 @@ const main = async () => {
         const rename = argv.r
         const silent = argv.s
         const verbose = argv.v
- 
+
         const userOptions = {
             directories,
             dryrun,
