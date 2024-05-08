@@ -83,7 +83,6 @@ const main = async () => {
         const userOptions = {
             directories,
             dryrun,
-            numbered,
             rename,
             silent,
             verbose,
