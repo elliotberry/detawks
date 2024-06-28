@@ -1,7 +1,5 @@
-import pluginImport from 'eslint-plugin-import'
 import perfectionistNatural from 'eslint-plugin-perfectionist/configs/recommended-natural'
 import prettierConfig from 'eslint-plugin-prettier/recommended'
-import promise from 'eslint-plugin-promise'
 import is from 'eslint-plugin-simple-import-sort'
 import eslintPluginUnicorn from 'eslint-plugin-unicorn'
 
@@ -18,8 +16,7 @@ export default [
         },
         plugins: {
             import: pluginImport,
-            pluginImport,
-            promise,
+
             'simple-import-sort': is,
         },
 
