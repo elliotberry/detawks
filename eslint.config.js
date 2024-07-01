@@ -15,7 +15,7 @@ export default [
             sourceType: 'module',
         },
         plugins: {
-            import: pluginImport,
+        
 
             'simple-import-sort': is,
         },
