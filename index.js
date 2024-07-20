@@ -4,10 +4,10 @@ import ignore from './lib/ignore.js'
 import { validateAndFormatInput } from './lib/path-validation.js'
 import processOneFile from './lib/process-one-file.js'
 import config from './lib/rc.js'
-import useFdir from './lib/useFdir.js'
-import fs from 'node:fs/promises'
-import { logIgnored, filesFoundInfo } from './lib/logging-functions.js'
+import useFdir from './lib/use-fdir.js'
 
+import { logIgnored, filesFoundInfo } from './lib/logging-functions.js'
+import readDirectory from './lib/read-directory.js'
 const run = async (globPattern, userOptions) => {
     const options = userOptions
         ? Object.assign({}, config, userOptions)
@@ -23,25 +23,7 @@ const run = async (globPattern, userOptions) => {
     if (inputString.type === 'fileArray') {
         files = inputString.files
     } else if (inputString.type === 'directory') {
-        files = await fs.readdir(inputString.path, {
-            recursive: true,
-            withFileTypes: true,
-        })
-
-        files = files.map((f) => {
-            let ret = null
-            if (options.directories === true) {
-                ret = f.path
-            } else {
-                const objectSymbols = Object.getOwnPropertySymbols(f)
-
-                if (f[objectSymbols[0]] === 1) {
-                    ret = f.path
-                }
-            }
-            return ret
-        }).filter((f) => f !== null)
-       
+        files = await readDirectory(inputString.path, options.directories)
     } else if (inputString.type === 'glob') {
         files = await useFdir(
             inputString.path,
@@ -56,7 +38,7 @@ const run = async (globPattern, userOptions) => {
     }
 
     //console log that we got some shit to process.
-    filesFoundInfo(files, inputString)
+    filesFoundInfo(files, inputString, inputString.type)
 
     //get pending new/old filepaths given our current options loadout
     let arrayOfFilePaths = []
