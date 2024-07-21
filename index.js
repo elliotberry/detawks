@@ -1,4 +1,4 @@
-import { baseLog } from './lib/closest-parent-info.js'
+import { logOldAndNewFilenames } from './lib/closest-parent-info.js'
 import getFilePathInfo from './lib/file-path-info.js'
 import ignore from './lib/ignore.js'
 import { validateAndFormatInput } from './lib/path-validation.js'
@@ -57,14 +57,14 @@ const run = async (globPattern, userOptions) => {
     logIgnored(arrayOfFilePaths, lengthBefore, options, files)
 
     if (options.dryrun) {
-        for await (const fileShit of arrayOfFilePaths) {
-            await baseLog(fileShit)
+        for await (const filesInfo of arrayOfFilePaths) {
+            await logOldAndNewFilenames(filesInfo)
         }
 
     } else {
         for await (const file of arrayOfFilePaths) {
             await processOneFile(file, options.rename)
-            await baseLog(file)
+            await logOldAndNewFilenames(file)
         }
     }
 }
