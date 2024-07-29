@@ -7,6 +7,12 @@ Renames files en masse so that when I scroll by them they all look uniform and p
 
 A lazy Node.js adaptation of [detox](https://github.com/dharple/detox), tailored with personal preferences for file naming. The primary motivation was to facilitate the installation of a detox setup using `yarn`. However, at length this started to take on some arguably useful configurations.
 
+## Installation
+
+```bash
+npm install -g detawks
+```
+
 ## Usage
 
 In your favorite terminal, run:
@@ -15,11 +21,11 @@ In your favorite terminal, run:
 detawks <options> <glob / directory / file> 
 ```
 
-### Example
-
-`detawks ./*.zip`
+### For Example: 
 
 ```bash
+detawks ./a_VERy_bad__filename.zip
+
 BIG OLD FILENAME.zip -> big-old-filename.zip
 я компьютерный файл.zip -> blahblah.zip 
 camelCase.zip -> camelcase.zip
@@ -35,13 +41,11 @@ camelCase.zip -> camelcase.zip
 - `-l, --list`: List all possible string operations.
 - `-h, --help`: Show something approximating this, if I remember to update it.
 
-## Config setup
-
-### Location
+## Configuration to Your Most Personal Desires
 
 The configuration file follows the `rc` [package conventions](https://www.npmjs.com/package/rc) - create your own config at `~/.detawksrc`. The default configuration is located at `./default.detawksrc`.
 
-### Example configuration
+### Example Configuration
 
 ```
  "ignores": [
@@ -64,9 +68,12 @@ The configuration file follows the `rc` [package conventions](https://www.npmjs.
     ]
 ```
 
-Specify a sequence of functions to apply to a string. Right now, you can only specify the absurd ones I've written (see below), but I'll add more, or not. When they take arguments, you can specify them in the `args` object as shown above.
+Like in Detox, you can specify a sequence of functions to apply to a string. Right now, you can only specify the absurd ones I've written (see below), but I'll add more, or not. When they take arguments, you can specify them in the `args` object as shown above.
 
-## Glossary: Sequence Functions Supported
+'ignores' is an array of globs that will be ignored when renaming files.
+
+
+## Glossary: String Fuckery Sequence Functions Supported
 
 *(see `./lib/string-modification-functions.js` for more details)*
 
@@ -84,26 +91,10 @@ Specify a sequence of functions to apply to a string. Right now, you can only sp
 
 Look at `slugify.js` to see the rats' nest of code that makes this work.
 
-And that's how I made converting strings to ASCII too complicated!
+And that's how I made converting strings to ASCII too complicated, while barely understanding how character encoding works!
 
-## Usage
-
-Execute the command:
-
-```
-detawks <options> <glob / directory / file> 
-```
-
-## Options
-
-- `-s`: Silent mode (no console logs for new file names).
-- `-d`: Dry run (shows potential file renames without executing them).
-- `-r`: Overwrite mode (renames files automatically without prompting).
-- `-f`: Includes directories in the operation. e.g. renames those too.
-- `-m`: Specifies max depth for operations.
-
-## Acknowledgements
+### Acknowledgements
 
 Special thanks to this contributor: [https://gist.github.com/codeguy/6684588](https://gist.github.com/codeguy/6684588)
 
-fdir is a great library for file stuff. Check it out: [https://github.com/thecodrr/fdir](github link)
+fdir is a great library for getting lists of files out of dirs fast as all hell. Check it out: [https://github.com/thecodrr/fdir](github link)
