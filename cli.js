@@ -13,7 +13,7 @@ const main = async () => {
             alias: 'silent',
             default: false,
             describe:
-                'silent mode; e.g no console.log describing new file names',
+                'silent mode; e.g no console.log describing new file names. For use in scripts',
             type: 'boolean',
         })
         .option('v', {

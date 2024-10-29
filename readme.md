@@ -1,6 +1,5 @@
 ![Detawks Logo](./.github/detawks-small.jpg)
-[![Bare Minimum Zero-Promises Node.js Garbage Suite 2023 Certified Edition](https://github.com/elliotberry/detawks/actions/workflows/nodejs-tests.yml/badge.svg)](https://github.com/elliotberry/detawks/actions/workflows/nodejs-tests.yml)
-
+![](https://img.shields.io/badge/garbage-red)
 # D͓̽e͓̽t͓̽a͓̽w͓̽k͓̽s͓̽
 
 Renames files en masse so that when I scroll by them they all look uniform and pleasing.
@@ -21,24 +20,23 @@ In your favorite terminal, run:
 detawks <options> <glob / directory / file> 
 ```
 
-### For Example: 
+### For Example
 
 ```bash
 detawks ./a_VERy_bad__filename.zip
 
-BIG OLD FILENAME.zip -> big-old-filename.zip
-я компьютерный файл.zip -> blahblah.zip 
-camelCase.zip -> camelcase.zip
+a_VERy_bad__filename.zip -> a-very-bad-filename.zip
 ```
 
 ### Options
 
 - `-s, --silent`: Silent mode (no console logs for new file names).
+- `-v, --verbose`: Verbose mode (console logs for new file names, other cool info).
 - `-d, --dryrun`: Dry run (shows potential file renames without executing them).
+- `-r, --rename`: if overwrite is possible, rename files AUTOMAGICALLY without prompting. This will take the form of `file-01.ext`, `file-02.ext`, etc.
 - `-f, --dirs`: Includes directories in the operation. e.g. renames those too.
-- `-n, --numbered`: Just rename everything to an integer; 1-????.
 - `-m, --max-depth`: Specifies max depth for operations.
-- `-l, --list`: List all possible string operations.
+- `-l, --list`: List all possible string operations (see below for a more direct method of perusing this information).
 - `-h, --help`: Show something approximating this, if I remember to update it.
 
 ## Configuration to Your Most Personal Desires
@@ -71,7 +69,6 @@ The configuration file follows the `rc` [package conventions](https://www.npmjs.
 Like in Detox, you can specify a sequence of functions to apply to a string. Right now, you can only specify the absurd ones I've written (see below), but I'll add more, or not. When they take arguments, you can specify them in the `args` object as shown above.
 
 'ignores' is an array of globs that will be ignored when renaming files.
-
 
 ## Glossary: String Fuckery Sequence Functions Supported
 
