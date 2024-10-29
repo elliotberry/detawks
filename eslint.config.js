@@ -1,13 +1,11 @@
-import js from "@eslint/js";
 import noSecrets from 'eslint-plugin-no-secrets'
-import perfectionistNatural from "eslint-plugin-perfectionist/configs/recommended-natural"
+import perfectionist from 'eslint-plugin-perfectionist'
 import is from "eslint-plugin-simple-import-sort"
+import sonarjs from "eslint-plugin-sonarjs";
 import eslintPluginUnicorn from "eslint-plugin-unicorn"
-
 export default [
   eslintPluginUnicorn.configs["flat/recommended"],
-  perfectionistNatural,
-  js.configs.recommended,
+
   {
     files: ["**/*.js"],
     languageOptions: {
@@ -16,7 +14,9 @@ export default [
     },
     plugins: {
       'no-secrets': noSecrets,
-      "simple-import-sort": is
+      perfectionist,
+      "simple-import-sort": is,
+      sonarjs
     },
 
     rules: {
