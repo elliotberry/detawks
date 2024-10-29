@@ -1,6 +1,6 @@
 {
     "name": "detawks",
-    "version": "0.1.10",
+    "version": "0.1.11",
     "keywords": [
         "cool",
         "useful",
@@ -76,5 +76,4 @@
         "access": "public",
         "registry": "https://registry.npmjs.org"
     }
-    
 }
