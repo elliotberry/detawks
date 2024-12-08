@@ -1,13 +1,12 @@
 import { logOldAndNewFilenames } from './lib/closest-parent-info.js'
 import getFilePathInfo from './lib/file-path-info.js'
 import ignore from './lib/ignore.js'
-import { filesFoundInfo,logIgnored } from './lib/logging-functions.js'
+import { filesFoundInfo, logIgnored } from './lib/logging-functions.js'
 import { validateAndFormatInput } from './lib/path-validation.js'
 import processOneFile from './lib/process-one-file.js'
 import config from './lib/rc.js'
 import readDirectory from './lib/read-directory.js'
 import useFdir from './lib/use-fdir.js'
-
 
 const run = async (globPattern, userOptions) => {
     const options = userOptions
@@ -43,16 +42,14 @@ const run = async (globPattern, userOptions) => {
 
     //get pending new/old filepaths given our current options loadout
     let arrayOfFilePaths = []
-
     for await (const file of files) {
         const filePathInfo = await getFilePathInfo(file)
-
         arrayOfFilePaths.push(filePathInfo)
     }
-
-    
+    //filter out null paths (bugfix)
     arrayOfFilePaths = arrayOfFilePaths.filter((f) => f !== null)
 
+    //Tell the user we ignored some garbage files
     const lengthBefore = arrayOfFilePaths.length
     arrayOfFilePaths = await ignore(arrayOfFilePaths)
     logIgnored(arrayOfFilePaths, lengthBefore, options, files)
@@ -61,7 +58,6 @@ const run = async (globPattern, userOptions) => {
         for await (const filesInfo of arrayOfFilePaths) {
             await logOldAndNewFilenames(filesInfo)
         }
-
     } else {
         for await (const file of arrayOfFilePaths) {
             await processOneFile(file, options.rename)
