@@ -1,6 +1,9 @@
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs'
+import path from 'node:path'
+
 import __dirname from '../lib/__dirname.js'
+
+//this part is important for the tests to run
 
 const dirPath = path.resolve(path.join(__dirname, 'test-assets'))
 async function deleteDirectoryAndFiles() {
@@ -33,36 +36,36 @@ export const names = [
     '✨🌀🌈🐱‍👤🐱‍🚀🐱‍🐉🐱‍💻👾🎃🕺💃🎉🎲🎸🚀🌠🌌🔮💎🎭🎨🖖🌀✨',
 ]
 async function createDirectoryWithFiles() {
-    await deleteDirectoryAndFiles();
+    await deleteDirectoryAndFiles()
     // Create directory
-    await fs.promises.mkdir(dirPath);
+    await fs.promises.mkdir(dirPath)
 
-    const getRandomNames = (num = 1) => {
-        let nameArr = [];
-        for (let i = 0; i < num; i++) {
-            nameArr.push(names[Math.floor(Math.random() * names.length)]);
+    const getRandomNames = (number_ = 1) => {
+        let nameArray = []
+        for (let index = 0; index < number_; index++) {
+            nameArray.push(names[Math.floor(Math.random() * names.length)])
         }
-        return nameArr.join(' ');
-    };
-    let arr = Array.from({ length: 20 }, (_, i) => i);
-    let testFilesMade = 0;
-    let oneFilePath = '';
-    for await (let i of arr) {
-        const num = Math.floor(Math.random() * 5) + 1;
-        let ext = '.txt';
-        if (i === 0) {
-            ext = '.md';
-        }
-
-        let filePath = path.join(dirPath, `${getRandomNames(num)}${ext}`);
-        await fs.promises.writeFile(filePath, 'Test content');
-        testFilesMade++;
-        if (i === 19) {
-            oneFilePath = filePath;
-        }
+        return nameArray.join(' ')
     }
-    console.log(`created ${testFilesMade} test files`)
-    return oneFilePath;
+    let array = Array.from({ length: 20 }, (_, index) => index)
+    let files = []
+
+    for await (let index of array) {
+        const number_ = Math.floor(Math.random() * 5) + 1
+        let extension = '.txt'
+        if (index === 0) {
+            extension = '.md'
+        }
+
+        let filePath = path.join(
+            dirPath,
+            `${getRandomNames(number_)}${extension}`
+        )
+        await fs.promises.writeFile(filePath, 'Test content')
+        files.push(filePath)
+    }
+
+    return files
 }
 
-export default createDirectoryWithFiles
+export { createDirectoryWithFiles, deleteDirectoryAndFiles }

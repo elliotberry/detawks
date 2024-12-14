@@ -54,15 +54,11 @@ const run = async (globPattern, userOptions) => {
     arrayOfFilePaths = await ignore(arrayOfFilePaths)
     logIgnored(arrayOfFilePaths, lengthBefore, options, files)
 
-    if (options.dryrun) {
-        for await (const filesInfo of arrayOfFilePaths) {
-            await logOldAndNewFilenames(filesInfo)
-        }
-    } else {
-        for await (const file of arrayOfFilePaths) {
+    for await (const file of arrayOfFilePaths) {
+        if (!options.dryrun) {
             await processOneFile(file, options.rename)
-            await logOldAndNewFilenames(file)
         }
+        await logOldAndNewFilenames(file)
     }
 }
 export default run
