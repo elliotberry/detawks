@@ -12,12 +12,9 @@ const run = async (globPattern, userOptions) => {
     const options = userOptions
         ? Object.assign({}, config, userOptions)
         : config
-    global.verbose = options.verbose
+
     global.silent = options.silent
 
-    global.verbose && console.log(`DEBUG ON`)
-    global.verbose &&
-        console.log(`globPattern: ${globPattern}, userOpts: ${userOptions}`)
     const inputString = await validateAndFormatInput(globPattern)
     let files
     if (inputString.type === 'fileArray') {

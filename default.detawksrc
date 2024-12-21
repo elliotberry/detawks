@@ -3,7 +3,7 @@
     "directories": false,
     "silent": true,
     "rename": true,
-    "verbose": false,
+
     "ignores": [
         "node_modules",
         ".DS_Store",

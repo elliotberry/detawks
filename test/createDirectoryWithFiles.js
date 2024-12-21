@@ -1,7 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 
-import __dirname from '../lib/__dirname.js'
+import __dirname from './__dirname.js'
 
 //this part is important for the tests to run
 
@@ -65,7 +65,7 @@ async function createDirectoryWithFiles() {
         files.push(filePath)
     }
 
-    return files
+    return {files: files, directory: dirPath}
 }
 
 export { createDirectoryWithFiles, deleteDirectoryAndFiles }

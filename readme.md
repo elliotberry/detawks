@@ -32,7 +32,6 @@ a_VERy_bad__filename.zip -> a-very-bad-filename.zip
 ### Options
 
 - `-s, --silent`: Silent mode (no console logs for new file names).
-- `-v, --verbose`: Verbose mode (console logs for new file names, other cool info).
 - `-d, --dryrun`: Dry run (shows potential file renames without executing them).
 - `-r, --rename`: if overwrite is possible, rename files AUTOMAGICALLY without prompting. This will take the form of `file-01.ext`, `file-02.ext`, etc.
 - `-f, --dirs`: Includes directories in the operation. e.g. renames those too.

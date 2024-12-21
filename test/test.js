@@ -1,10 +1,10 @@
 import assert from 'assert'
 import execa from 'elliotisms/exec'
-import fs from 'node:fs'
+import detawks from "../index.js"
 import path from 'node:path'
 import {describe, test, beforeEach, afterEach} from 'node:test'
 import chalk from 'chalk'
-import __dirname from '../lib/__dirname.js'
+import __dirname from './__dirname.js'
 import { slugify } from '../lib/slugify.js'
 import {createDirectoryWithFiles, deleteDirectoryAndFiles} from './createDirectoryWithFiles.js'
 
@@ -25,16 +25,29 @@ const app = 'node ./cli.js'
 
 describe("tests", async () => {
     beforeEach(async (t) => {
-        let files = await createDirectoryWithFiles()
-        console.log(files)
-        t.context.files = files
+        let {files, directory} = await createDirectoryWithFiles()
+       // console.log(files)
+        t.context.directory = directory
     })
 
     afterEach(async (t) => {
        await deleteDirectoryAndFiles()
     })
-   
 
+    test('does it do it without error', async (t) => {
+        let failed = false
+        try {
+          
+           await detawks(directory)
+        } catch (error) {
+            console.error(error)
+            failed = true
+        }
+        assert.strictEqual(failed, false)
+
+    })
+
+   /* 
     test('test command line usage', async (t) => {
         let failed = false
         try {
@@ -124,12 +137,5 @@ describe("tests", async () => {
             assert.strictEqual(expected, actual)
         }
     })
+        */
 })
-const manualTest = async () => {
-    await createDirectoryWithFiles()
-    await execa(
-        `${app} "/Users/eberry/projects/___MY-SCRIPTS/detawks/test-assets" --dryrun`
-    )
-}
-
-//main()

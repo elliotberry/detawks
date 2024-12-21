@@ -16,13 +16,7 @@ const main = async () => {
                 'silent mode; e.g no console.log describing new file names. For use in scripts',
             type: 'boolean',
         })
-        .option('v', {
-            alias: 'verbose',
-            default: false,
-            describe:
-                'verbose mode; logs files renamed, as well as other useful information',
-            type: 'boolean',
-        })
+    
         .option('d', {
             alias: 'dryrun',
             default: false,
@@ -78,14 +72,12 @@ const main = async () => {
         const directories = argv.f
         const rename = argv.r
         const silent = argv.s
-        const verbose = argv.v
 
         const userOptions = {
             directories,
             dryrun,
             rename,
             silent,
-            verbose,
         }
         if (argv.m) {
             const maxDepth = Number.parseInt(argv.m)
