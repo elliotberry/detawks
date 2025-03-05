@@ -37,10 +37,10 @@
     "author": "ɛʟʟɨօȶ b",
     "license": "The Unlicense",
     "dependencies": {
-        "chalk": "^5.3.0",
+        "chalk": "^5.4.1",
         "change-case": "^5.4.4",
         "elliotisms": "^0.0.51",
-        "fdir": "^6.4.2",
+        "fdir": "^6.4.3",
         "picomatch": "^4.x",
         "rc": "^1.2.8",
         "text-case": "^1.0.9",
@@ -53,23 +53,23 @@
         "singleQuote": true
     },
     "devDependencies": {
-        "@eslint/js": "^9.16.0",
-        "@stylistic/eslint-plugin-js": "^2.12.0",
-        "eslint": "^9.16.0",
-        "eslint-config-prettier": "^9.1.0",
+        "@eslint/js": "^9.21.0",
+        "@stylistic/eslint-plugin-js": "^4.2.0",
+        "eslint": "^9.21.0",
+        "eslint-config-prettier": "^10.0.2",
         "eslint-plugin-import": "^2.31.0",
-        "eslint-plugin-n": "^17.15.0",
-        "eslint-plugin-no-secrets": "^2.1.1",
+        "eslint-plugin-n": "^17.16.2",
+        "eslint-plugin-no-secrets": "^2.2.1",
         "eslint-plugin-node": "^11.1.0",
-        "eslint-plugin-perfectionist": "^4.2.0",
-        "eslint-plugin-prettier": "^5.2.1",
+        "eslint-plugin-perfectionist": "^4.9.0",
+        "eslint-plugin-prettier": "^5.2.3",
         "eslint-plugin-promise": "^7.2.1",
         "eslint-plugin-security": "^3.0.1",
         "eslint-plugin-simple-import-sort": "^12.1.1",
-        "eslint-plugin-sonarjs": "^3.0.1",
-        "eslint-plugin-unicorn": "^56.0.1",
-        "prettier": "^3.4.2",
-        "release-it": "^17.10.0"
+        "eslint-plugin-sonarjs": "^3.0.2",
+        "eslint-plugin-unicorn": "^57.0.0",
+        "prettier": "^3.5.3",
+        "release-it": "^18.1.2"
     },
     "publishConfig": {
         "executableFiles": [
