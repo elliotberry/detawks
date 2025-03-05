@@ -1,11 +1,12 @@
 import assert from 'assert'
-import execa from 'elliotisms/exec'
-import detawks from "../index.js"
-import path from 'node:path'
-import {describe, test, beforeEach, afterEach} from 'node:test'
 import chalk from 'chalk'
-import __dirname from './__dirname.js'
+import execa from 'elliotisms/exec'
+import path from 'node:path'
+import {afterEach,beforeEach, describe, test} from 'node:test'
+
+import detawks from "../index.js"
 import { slugify } from '../lib/slugify.js'
+import __dirname from './__dirname.js'
 import {createDirectoryWithFiles, deleteDirectoryAndFiles} from './createDirectoryWithFiles.js'
 
 const coolText = chalk.bgBlue.black
@@ -25,7 +26,7 @@ const app = 'node ./cli.js'
 
 describe("tests", async () => {
     beforeEach(async (t) => {
-        let {files, directory} = await createDirectoryWithFiles()
+        let {directory, files} = await createDirectoryWithFiles()
        // console.log(files)
         t.context.directory = directory
     })

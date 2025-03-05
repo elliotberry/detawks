@@ -1,6 +1,7 @@
 {
     "name": "detawks",
     "version": "0.1.13",
+    "description": "An opinionated mass file renamer in Node. Meant to be similar to the venerable detox unix application, but, crappier, since it's my attempt in nodejs.",
     "keywords": [
         "cool",
         "useful",
@@ -10,32 +11,30 @@
         "cli",
         "hentai"
     ],
-    "os": [
-        "linux",
-        "darwin"
-    ],
-    "module": "./index.js",
-    "main": "./index.js",
-    "description": "An opinionated mass file renamer in Node. Meant to be similar to the venerable detox unix application, but, crappier, since it's my attempt in nodejs.",
-    "scripts": {
-        "test": "node ./test/test.js"
-    },
     "repository": {
         "type": "git",
         "url": "git@github.com:elliotberry/detawks.git"
     },
-    "engines": {
-        "node": ">=18.10"
-    },
+    "license": "The Unlicense",
+    "author": "ɛʟʟɨօȶ b",
+    "type": "module",
+    "main": "./index.js",
+    "module": "./index.js",
+    "bin": "./cli.js",
     "files": [
         "lib/**/*",
         "index.js",
         "cli.js"
     ],
-    "bin": "./cli.js",
-    "type": "module",
-    "author": "ɛʟʟɨօȶ b",
-    "license": "The Unlicense",
+    "scripts": {
+        "test": "node ./test/test.js"
+    },
+    "prettier": {
+        "trailingComma": "es5",
+        "tabWidth": 4,
+        "semi": false,
+        "singleQuote": true
+    },
     "dependencies": {
         "chalk": "^5.4.1",
         "change-case": "^5.4.4",
@@ -46,31 +45,33 @@
         "text-case": "^1.0.9",
         "yargs": "^17.7.2"
     },
-    "prettier": {
-        "trailingComma": "es5",
-        "tabWidth": 4,
-        "semi": false,
-        "singleQuote": true
-    },
     "devDependencies": {
-        "@eslint/js": "^9.21.0",
-        "@stylistic/eslint-plugin-js": "^4.2.0",
-        "eslint": "^9.21.0",
-        "eslint-config-prettier": "^10.0.2",
-        "eslint-plugin-import": "^2.31.0",
-        "eslint-plugin-n": "^17.16.2",
-        "eslint-plugin-no-secrets": "^2.2.1",
-        "eslint-plugin-node": "^11.1.0",
-        "eslint-plugin-perfectionist": "^4.9.0",
-        "eslint-plugin-prettier": "^5.2.3",
-        "eslint-plugin-promise": "^7.2.1",
-        "eslint-plugin-security": "^3.0.1",
-        "eslint-plugin-simple-import-sort": "^12.1.1",
-        "eslint-plugin-sonarjs": "^3.0.2",
-        "eslint-plugin-unicorn": "^57.0.0",
-        "prettier": "^3.5.3",
-        "release-it": "^18.1.2"
+    "@eslint/js": "^9.21.0",
+    "@stylistic/eslint-plugin-js": "^4.2.0",
+    "eslint": "^9.21.0",
+    "eslint-config-prettier": "^10.0.2",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-n": "^17.16.2",
+    "eslint-plugin-no-secrets": "^2.2.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-package-json": "^0.26.2",
+    "eslint-plugin-perfectionist": "^4.9.0",
+    "eslint-plugin-prettier": "^5.2.3",
+    "eslint-plugin-promise": "^7.2.1",
+    "eslint-plugin-security": "^3.0.1",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "eslint-plugin-sonarjs": "^3.0.2",
+    "eslint-plugin-unicorn": "^57.0.0",
+    "prettier": "^3.5.3",
+    "release-it": "^18.1.2"
+  },
+    "engines": {
+        "node": ">=18.10"
     },
+    "os": [
+        "linux",
+        "darwin"
+    ],
     "publishConfig": {
         "executableFiles": [
             "./cli.js"
