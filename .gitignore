@@ -1,6 +1,7 @@
 node_modules
 .DS_Store
 .htaccess
+.env
 .vscode
 test-assets
 *.log
