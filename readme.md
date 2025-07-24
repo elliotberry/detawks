@@ -36,8 +36,32 @@ a_VERy_bad__filename.zip -> a-very-bad-filename.zip
 - `-r, --rename`: if overwrite is possible, rename files AUTOMAGICALLY without prompting. This will take the form of `file-01.ext`, `file-02.ext`, etc.
 - `-f, --dirs`: Includes directories in the operation. e.g. renames those too.
 - `-m, --max-depth`: Specifies max depth for operations.
+- `-b, --batch-size`: Number of files to process concurrently (default: 50). Use lower values for limited resources, higher for better performance.
 - `-l, --list`: List all possible string operations (see below for a more direct method of perusing this information).
 - `-h, --help`: Show something approximating this, if I remember to update it.
+
+### Performance Features
+
+- **Concurrent Processing**: Files are processed in parallel for faster operation
+- **Progress Indicators**: Shows progress for large file sets (>10 files)
+- **Performance Monitoring**: Reports processing speed for large operations
+- **Configurable Concurrency**: Adjust batch size based on your system capabilities
+
+### Examples
+
+```bash
+# Basic usage with default settings
+detawks ./files
+
+# High-performance processing
+detawks --batch-size 100 ./files
+
+# Conservative processing for limited resources
+detawks --batch-size 10 ./files
+
+# Dry run with progress indicators
+detawks --dryrun --batch-size 25 ./files
+```
 
 ## Configuration to Your Most Personal Desires
 

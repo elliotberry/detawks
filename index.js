@@ -1,19 +1,35 @@
 import { logOldAndNewFilenames } from './lib/closest-parent-info.js'
 import getFilePathInfo from './lib/file-path-info.js'
 import ignore from './lib/ignore.js'
-import { filesFoundInfo, logIgnored } from './lib/logging-functions.js'
+import { filesFoundInfo, logIgnored, showProgress } from './lib/logging-functions.js'
 import { validateAndFormatInput } from './lib/path-validation.js'
 import processOneFile from './lib/process-one-file.js'
 import config from './lib/rc.js'
 import readDirectory from './lib/read-directory.js'
 import useFdir from './lib/use-fdir.js'
+import { performance } from 'node:perf_hooks'
+
+// Process files in batches to control concurrency
+const processBatch = async (files, batchSize, processor) => {
+    const results = []
+    for (let i = 0; i < files.length; i += batchSize) {
+        const batch = files.slice(i, i + batchSize)
+        const batchResults = await Promise.all(batch.map(processor))
+        results.push(...batchResults)
+        
+        // Show progress
+        showProgress(Math.min(i + batchSize, files.length), files.length)
+    }
+    return results
+}
 
 const run = async (globPattern, userOptions) => {
+    const startTime = performance.now()
     const options = userOptions
         ? Object.assign({}, config, userOptions)
         : config
 
-    global.silent = options.silent
+    globalThis.silent = options.silent
 
     const inputString = await validateAndFormatInput(globPattern)
     let files
@@ -37,12 +53,9 @@ const run = async (globPattern, userOptions) => {
     //console log that we got some shit to process.
     filesFoundInfo(files, inputString, inputString.type)
 
-    //get pending new/old filepaths given our current options loadout
-    let arrayOfFilePaths = []
-    for await (const file of files) {
-        const filePathInfo = await getFilePathInfo(file)
-        arrayOfFilePaths.push(filePathInfo)
-    }
+    //get pending new/old filepaths given our current options loadout - optimized for concurrent processing
+    const batchSize = options.batchSize || 50
+    let arrayOfFilePaths = await processBatch(files, batchSize, getFilePathInfo)
     //filter out null paths (bugfix)
     arrayOfFilePaths = arrayOfFilePaths.filter((f) => f !== null)
 
@@ -51,11 +64,22 @@ const run = async (globPattern, userOptions) => {
     arrayOfFilePaths = await ignore(arrayOfFilePaths)
     logIgnored(arrayOfFilePaths, lengthBefore, options, files)
 
+    // Process files in batches for better performance and control
+    if (!options.dryrun) {
+        await processBatch(arrayOfFilePaths, batchSize, file => processOneFile(file, options.rename))
+    }
+    
+    // Log results sequentially to maintain readable output order
     for await (const file of arrayOfFilePaths) {
-        if (!options.dryrun) {
-            await processOneFile(file, options.rename)
-        }
         await logOldAndNewFilenames(file)
+    }
+
+    // Show performance summary
+    if (!globalThis.silent && files.length > 10) {
+        const endTime = performance.now()
+        const duration = ((endTime - startTime) / 1000).toFixed(2)
+        const filesPerSecond = (files.length / (endTime - startTime) * 1000).toFixed(1)
+        console.log(`\nPerformance: Processed ${files.length} files in ${duration}s (${filesPerSecond} files/sec)`)
     }
 }
 export default run

@@ -42,6 +42,12 @@ const main = async () => {
             describe: 'max depth',
             type: 'number',
         })
+        .option('b', {
+            alias: 'batch-size',
+            default: 50,
+            describe: 'number of files to process concurrently (default: 50)',
+            type: 'number',
+        })
         //options to list all available string modification functions
         .option('l', {
             alias: 'list',
@@ -72,12 +78,14 @@ const main = async () => {
         const directories = argv.f
         const rename = argv.r
         const silent = argv.s
+        const batchSize = argv.b
 
         const userOptions = {
             directories,
             dryrun,
             rename,
             silent,
+            batchSize,
         }
         if (argv.m) {
             const maxDepth = Number.parseInt(argv.m)

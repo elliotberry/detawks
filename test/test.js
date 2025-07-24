@@ -1,22 +1,13 @@
-import assert from 'assert'
-import chalk from 'chalk'
-import execa from 'elliotisms/exec'
-import path from 'node:path'
-import {afterEach,beforeEach, describe, test} from 'node:test'
+import assert from 'node:assert'
+import {afterEach, beforeEach, describe, test} from 'node:test'
 
 import detawks from "../index.js"
-import { slugify } from '../lib/slugify.js'
-import __dirname from './__dirname.js'
 import {createDirectoryWithFiles, deleteDirectoryAndFiles} from './createDirectoryWithFiles.js'
 
-const coolText = chalk.bgBlue.black
-const dirPath = path.resolve(path.join(__dirname, 'test-assets'))
-const app = 'node ./cli.js'
-
- //a function that returns true if the string contains no non-ascii characters and npo underscores
- function noNonASCIIChars(string_) {
+//a function that returns true if the string contains no non-ascii characters and no underscores
+function noNonASCIIChars(string_) {
     for (let index = 0; index < string_.length; index++) {
-        const charCode = string_.charCodeAt(index)
+        const charCode = string_.codePointAt(index)
         if (charCode > 127 || charCode === 95) {
             return false
         }
@@ -25,27 +16,48 @@ const app = 'node ./cli.js'
 }
 
 describe("tests", async () => {
-    beforeEach(async (t) => {
-        let {directory, files} = await createDirectoryWithFiles()
-       // console.log(files)
-        t.context.directory = directory
+    let testDirectory
+
+    beforeEach(async () => {
+        const result = await createDirectoryWithFiles()
+        testDirectory = result.directory
     })
 
-    afterEach(async (t) => {
+    afterEach(async () => {
        await deleteDirectoryAndFiles()
     })
 
-    test('does it do it without error', async (t) => {
+    test('does it do it without error', async () => {
         let failed = false
         try {
-          
-           await detawks(directory)
+           await detawks(testDirectory)
         } catch (error) {
             console.error(error)
             failed = true
         }
         assert.strictEqual(failed, false)
+    })
 
+    test('dry run works correctly', async () => {
+        let failed = false
+        try {
+           await detawks(testDirectory, { dryrun: true, silent: true })
+        } catch (error) {
+            console.error(error)
+            failed = true
+        }
+        assert.strictEqual(failed, false)
+    })
+
+    test('batch processing works', async () => {
+        let failed = false
+        try {
+           await detawks(testDirectory, { dryrun: true, silent: true, batchSize: 5 })
+        } catch (error) {
+            console.error(error)
+            failed = true
+        }
+        assert.strictEqual(failed, false)
     })
 
    /* 
@@ -105,7 +117,7 @@ describe("tests", async () => {
             console.log(
                 coolText('Running detawks against the whole test directory...')
             )
-            await execa(`${app} ${dirPath} --dryrun --rename --silent`)
+            await execa(`${dirPath} --dryrun --rename --silent`)
             console.log(coolText('Deleting directory and files...'))
 
             console.log(coolText('Tests finished!'))

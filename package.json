@@ -61,7 +61,7 @@
         "release-it": "^19.0.3"
     },
     "engines": {
-        "node": ">=18.10"
+        "node": ">=20.19.0"
     },
     "os": [
         "linux",
