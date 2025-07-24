@@ -1,5 +1,6 @@
 ![Detawks Logo](./.github/detawks-small.jpg)
 ![](https://img.shields.io/badge/garbage-red)
+![CI/CD Pipeline](https://github.com/elliotberry/detawks/workflows/CI%2FCD%20Pipeline/badge.svg)
 
 # D͓̽e͓̽t͓̽a͓̽w͓̽k͓̽s͓̽
 
