@@ -106,12 +106,12 @@ async function createDirectoryWithFiles() {
     }
 
     // Create 10 additional random files
-    for (let i = 0; i < 10; i++) {
+    for (let index = 0; index < 10; index++) {
         const number_ = Math.floor(Math.random() * 3) + 1
         let extension
-        if (i % 3 === 0) {
+        if (index % 3 === 0) {
             extension = '.md'
-        } else if (i % 3 === 1) {
+        } else if (index % 3 === 1) {
             extension = '.json'
         } else {
             extension = '.txt'
@@ -123,7 +123,7 @@ async function createDirectoryWithFiles() {
         files.push(filePath)
     }
 
-    return {files: files, directory: dirPath}
+    return {directory: dirPath, files: files}
 }
 
 export { createDirectoryWithFiles, deleteDirectoryAndFiles }

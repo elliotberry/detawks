@@ -44,7 +44,7 @@ describe("tests", async () => {
     test('batch processing works', async () => {
         let failed = false
         try {
-           await detawks(testDirectory, { dryrun: true, silent: true, batchSize: 5 })
+           await detawks(testDirectory, { batchSize: 5, dryrun: true, silent: true })
         } catch (error) {
             console.error(error)
             failed = true
@@ -61,9 +61,9 @@ describe("tests", async () => {
             
             // Test renaming directories
             await detawks(testDirectory, { 
+                directories: true, 
                 dryrun: true, 
-                silent: true, 
-                directories: true 
+                silent: true 
             })
         } catch (error) {
             console.error(error)

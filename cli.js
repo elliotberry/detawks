@@ -81,11 +81,11 @@ const main = async () => {
         const batchSize = argv.b
 
         const userOptions = {
+            batchSize,
             directories,
             dryrun,
             rename,
             silent,
-            batchSize,
         }
         if (argv.m) {
             const maxDepth = Number.parseInt(argv.m)

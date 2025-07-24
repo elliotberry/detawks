@@ -1,3 +1,5 @@
+import { performance } from 'node:perf_hooks'
+
 import { logOldAndNewFilenames } from './lib/closest-parent-info.js'
 import getFilePathInfo from './lib/file-path-info.js'
 import ignore from './lib/ignore.js'
@@ -7,18 +9,17 @@ import processOneFile from './lib/process-one-file.js'
 import config from './lib/rc.js'
 import readDirectory from './lib/read-directory.js'
 import useFdir from './lib/use-fdir.js'
-import { performance } from 'node:perf_hooks'
 
 // Process files in batches to control concurrency
 const processBatch = async (files, batchSize, processor) => {
     const results = []
-    for (let i = 0; i < files.length; i += batchSize) {
-        const batch = files.slice(i, i + batchSize)
+    for (let index = 0; index < files.length; index += batchSize) {
+        const batch = files.slice(index, index + batchSize)
         const batchResults = await Promise.all(batch.map(processor))
         results.push(...batchResults)
         
         // Show progress
-        showProgress(Math.min(i + batchSize, files.length), files.length)
+        showProgress(Math.min(index + batchSize, files.length), files.length)
     }
     return results
 }
