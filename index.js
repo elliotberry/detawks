@@ -1,5 +1,3 @@
-import { performance } from 'node:perf_hooks'
-
 import { logOldAndNewFilenames } from './lib/closest-parent-info.js'
 import getFilePathInfo from './lib/file-path-info.js'
 import ignore from './lib/ignore.js'
@@ -9,6 +7,7 @@ import processOneFile from './lib/process-one-file.js'
 import config from './lib/rc.js'
 import readDirectory from './lib/read-directory.js'
 import useFdir from './lib/use-fdir.js'
+
 
 // Process files in batches to control concurrency
 const processBatch = async (files, batchSize, processor) => {
@@ -24,8 +23,9 @@ const processBatch = async (files, batchSize, processor) => {
     return results
 }
 
+
 const run = async (globPattern, userOptions) => {
-    const startTime = performance.now()
+  
     const options = userOptions
         ? Object.assign({}, config, userOptions)
         : config
@@ -80,12 +80,6 @@ const run = async (globPattern, userOptions) => {
         await logOldAndNewFilenames(file)
     }
 
-    // Show performance summary
-    if (!globalThis.silent && files.length > 10) {
-        const endTime = performance.now()
-        const duration = ((endTime - startTime) / 1000).toFixed(2)
-        const filesPerSecond = (files.length / (endTime - startTime) * 1000).toFixed(1)
-        console.log(`\nPerformance: Processed ${files.length} files in ${duration}s (${filesPerSecond} files/sec)`)
-    }
+
 }
 export default run
