@@ -7,7 +7,6 @@ import is from 'eslint-plugin-simple-import-sort'
 import sonarjs from 'eslint-plugin-sonarjs'
 import eslintPluginUnicorn from 'eslint-plugin-unicorn'
 
-
 export default [
     eslintPluginUnicorn.configs['flat/recommended'],
     js.configs.recommended,
@@ -22,9 +21,8 @@ export default [
             globals: {
                 Buffer: 'readonly',
                 console: 'readonly',
-                "fetch": 'readonly',
+                fetch: 'readonly',
                 process: 'readonly',
-
             },
             sourceType: 'module',
         },
@@ -52,14 +50,14 @@ export default [
             'perfectionist/sort-objects': 'warn',
             'simple-import-sort/exports': 'warn',
             'simple-import-sort/imports': 'warn',
-            "sonarjs/no-nested-template-literals": 'warn',
+            'sonarjs/no-nested-template-literals': 'warn',
             'unicorn/consistent-function-scoping': 'warn',
             'unicorn/no-array-callback-reference': 'warn',
             'unicorn/no-null': 'warn',
             'unicorn/no-process-exit': 'off',
             'unicorn/prefer-switch': 'off',
             'unicorn/prefer-top-level-await': 'off',
-            'unicorn/prevent-abbreviations': 'warn'
+            'unicorn/prevent-abbreviations': 'warn',
         },
     },
 ]
