@@ -18,7 +18,7 @@ const main = async () => {
         })
     
         .option('d', {
-            alias: 'dryrun',
+            alias: ['dryrun', 'dry-run'],
             default: false,
             describe: 'dry run, showing what files would be renamed',
             type: 'boolean',
@@ -74,7 +74,8 @@ const main = async () => {
             process.exit(1)
         }
 
-        const dryrun = argv.d
+        // normalize dryrun from multiple possible flags
+        const dryrun = Boolean(argv.d || argv.dryrun || argv['dry-run'] || argv.dryRun)
         const directories = argv.f
         const rename = argv.r
         const silent = argv.s

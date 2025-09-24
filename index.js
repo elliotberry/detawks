@@ -30,6 +30,11 @@ const run = async (globPattern, userOptions) => {
         ? Object.assign({}, config, userOptions)
         : config
 
+    // normalize dryrun boolean in case callers pass different casings/aliases
+    options.dryrun = Boolean(
+        options.dryrun || options.dryRun || options['dry-run']
+    )
+
     globalThis.silent = options.silent
 
     const inputString = await validateAndFormatInput(globPattern)

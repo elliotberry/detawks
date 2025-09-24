@@ -26,11 +26,7 @@
         "index.js",
         "cli.js"
     ],
-    "scripts": {
-        "lint": "eslint . --ext .js",
-        "lint:fix": "eslint . --ext .js --fix",
-        "test": "node ./test/test.js"
-    },
+ 
     "prettier": {
         "trailingComma": "es5",
         "tabWidth": 4,
@@ -40,7 +36,6 @@
     "dependencies": {
         "chalk": "^5.6.2",
         "change-case": "^5.4.4",
-        "elliotisms": "^0.0.55",
         "fdir": "^6.5.0",
         "picomatch": "^4.x",
         "rc": "^1.2.8",
@@ -48,15 +43,11 @@
         "yargs": "^18.0.0"
     },
     "devDependencies": {
-        "@stylistic/eslint-plugin-js": "^4.4.1",
         "eslint": "^9.36.0",
-        "eslint-config-prettier": "^10.1.8",
-        "eslint-plugin-elliot": "file:../elliot-lint",
         "eslint-plugin-import-x": "^4.16.1",
         "eslint-plugin-node-dependencies": "^1.1.2",
         "eslint-plugin-package-json": "^0.56.3",
         "eslint-plugin-perfectionist": "^4.15.0",
-        "eslint-plugin-prettier": "^5.5.4",
         "eslint-plugin-simple-import-sort": "^12.1.1",
         "eslint-plugin-sonarjs": "^3.0.5",
         "eslint-plugin-unicorn": "^61.0.2",
@@ -70,6 +61,12 @@
         "linux",
         "darwin"
     ],
+    "scripts": {
+        "lint": "eslint . --ext .js",
+        "lint:fix": "eslint . --ext .js --fix",
+        "test": "node ./test/test.js",
+        "release": "release-it --ci"
+    },
     "publishConfig": {
         "executableFiles": [
             "./cli.js"
