@@ -2,6 +2,7 @@ node_modules
 .DS_Store
 .htaccess
 .env
+.yarn
 .vscode
 test-assets
 *.log
