@@ -7,20 +7,7 @@ import processOneFile from './lib/process-one-file.js'
 import config from './lib/rc.js'
 import readDirectory from './lib/read-directory.js'
 import useFdir from './lib/use-fdir.js'
-
-// Process files in batches to control concurrency
-const processBatch = async (files, batchSize, processor) => {
-    const results = []
-    for (let index = 0; index < files.length; index += batchSize) {
-        const batch = files.slice(index, index + batchSize)
-        const batchResults = await Promise.all(batch.map(processor))
-        results.push(...batchResults)
-
-        // Show progress
-        showProgress(Math.min(index + batchSize, files.length), files.length)
-    }
-    return results
-}
+import { processBatch, processSynchronously } from './lib/processing.js'
 
 const run = async (globPattern, userOptions) => {
     const options = userOptions
@@ -54,12 +41,15 @@ const run = async (globPattern, userOptions) => {
     }
 
     //get pending new/old filepaths given our current options loadout - optimized for concurrent processing
-    const batchSize = options.batchSize || 50
-    let arrayOfFilePaths = await processBatch(files, batchSize, getFilePathInfo)
+   // const batchSize = options.batchSize || 50
+    let arrayOfFilePaths = await processSynchronously(files, getFilePathInfo)
+    
     //filter out null paths (bugfix)
     arrayOfFilePaths = arrayOfFilePaths.filter(
         (f) => f !== null && f !== undefined && Object.keys(f).length > 0 && f.old !== f.new
     )
+
+    
     //Tell the user we ignored some garbage files
     const lengthBefore = arrayOfFilePaths.length
     arrayOfFilePaths = await ignore(arrayOfFilePaths)
@@ -67,11 +57,12 @@ const run = async (globPattern, userOptions) => {
 
     // Process files in batches for better performance and control
     if (!options.dryrun) {
-        await processBatch(arrayOfFilePaths, batchSize, (file) =>
+        await processSynchronously(arrayOfFilePaths, (file) =>
             processOneFile(file, options.rename)
         )
     }
 
+    //LOG RESULTS
     // Log results sequentially to maintain readable output order
     for await (const file of arrayOfFilePaths) {
         await logOldAndNewFilenames(file)
