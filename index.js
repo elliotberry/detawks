@@ -1,13 +1,13 @@
 import { logOldAndNewFilenames } from './lib/closest-parent-info.js'
 import getFilePathInfo from './lib/file-path-info.js'
 import ignore from './lib/ignore.js'
-import { logIgnored, showProgress } from './lib/logging-functions.js'
+import { logIgnored } from './lib/logging-functions.js'
 import { validateAndFormatInput } from './lib/path-validation.js'
 import processOneFile from './lib/process-one-file.js'
+import { processSynchronously } from './lib/processing.js'
 import config from './lib/rc.js'
 import readDirectory from './lib/read-directory.js'
 import useFdir from './lib/use-fdir.js'
-import { processBatch, processSynchronously } from './lib/processing.js'
 
 const run = async (globPattern, userOptions) => {
     const options = userOptions
