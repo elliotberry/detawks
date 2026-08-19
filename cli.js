@@ -7,16 +7,15 @@ import detawks from './index.js'
 import { stringModificationFunctions } from './lib/slugify.js'
 
 const main = async () => {
-    const parser = await yargs(hideBin(process.argv))
+    const argv = await yargs(hideBin(process.argv))
         .usage('Usage: $0 [options] <glob / file / dir>')
         .option('s', {
             alias: 'silent',
             default: false,
             describe:
-                'silent mode; e.g no console.log describing new file names. For use in scripts',
+                'silent mode; no console output describing new file names. For use in scripts',
             type: 'boolean',
         })
-    
         .option('d', {
             alias: ['dryrun', 'dry-run'],
             default: false,
@@ -27,7 +26,7 @@ const main = async () => {
             alias: 'rename',
             default: true,
             describe:
-                'if overwrite is possible, rename files AUTOMAGICALLY without prompting',
+                'if a target name already exists, auto-suffix (file-01.ext). Use --no-rename to skip collisions',
             type: 'boolean',
         })
         .option('f', {
@@ -38,8 +37,8 @@ const main = async () => {
         })
         .option('m', {
             alias: 'max-depth',
-            default: -1,
-            describe: 'max depth',
+            describe:
+                'max directory depth (0 = this directory only; omit for unlimited)',
             type: 'number',
         })
         .option('b', {
@@ -48,7 +47,6 @@ const main = async () => {
             describe: 'number of files to process concurrently (default: 50)',
             type: 'number',
         })
-        //options to list all available string modification functions
         .option('l', {
             alias: 'list',
             describe: 'list all available string modification functions',
@@ -56,47 +54,42 @@ const main = async () => {
         })
         .help('h')
         .alias('h', 'help')
+        .parse()
 
-    const argv = await parser.parse()
-    let globPattern
-
-    globPattern = argv._.length === 1 ? argv._[0] : argv._
     if (argv.l) {
-        for (const [key] of Object.entries(stringModificationFunctions)) {
-            const a = stringModificationFunctions[key]
-            console.log(`${a.name}${a.description ? `: ${a.description}` : ''}`)
+        for (const [key, value] of Object.entries(stringModificationFunctions)) {
+            const detail = value.description || value.name || ''
+            console.log(detail ? `${key}: ${detail}` : key)
         }
-
         process.exit(0)
-    } else {
-        if (!globPattern) {
-            console.error(chalk.red('no file pattern provided'))
-            process.exit(1)
-        }
-
-        // normalize dryrun from multiple possible flags
-        const dryrun = Boolean(argv.d || argv.dryrun || argv['dry-run'] || argv.dryRun)
-        const directories = argv.f
-        const rename = argv.r
-        const silent = argv.s
-        const batchSize = argv.b
-
-        const userOptions = {
-            batchSize,
-            directories,
-            dryrun,
-            rename,
-            silent,
-        }
-        if (argv.m) {
-            const maxDepth = Number.parseInt(argv.m)
-            if (!Number.isNaN(maxDepth)) {
-                userOptions.maxDepth = maxDepth
-            }
-        }
-        const options = userOptions
-
-        await detawks(globPattern, options)
     }
+
+    const positional = argv._.map(String).filter(Boolean)
+    if (positional.length === 0) {
+        console.error(chalk.red('no file pattern provided'))
+        process.exit(1)
+    }
+
+    const globPattern = positional.length === 1 ? positional[0] : positional
+    const userOptions = {
+        batchSize: argv.b,
+        directories: argv.f,
+        dryrun: Boolean(argv.d || argv.dryrun || argv['dry-run']),
+        rename: argv.r,
+        silent: argv.s,
+    }
+
+    if (argv.m !== undefined && argv.m !== null && !Number.isNaN(argv.m)) {
+        const maxDepth = Number.parseInt(argv.m, 10)
+        if (maxDepth >= 0) {
+            userOptions.maxDepth = maxDepth
+        }
+    }
+
+    await detawks(globPattern, userOptions)
 }
-main()
+
+main().catch((error) => {
+    console.error(chalk.red(error.message || error))
+    process.exit(1)
+})

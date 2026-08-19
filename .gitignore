@@ -5,6 +5,7 @@ node_modules
 .yarn
 .vscode
 test-assets
+.detawksrc
 *.log
 .DS_Store?
 ._*

@@ -1,12 +1,12 @@
 ![Detawks Logo](./.github/detawks-small.jpg)
 ![](https://img.shields.io/badge/garbage-red)
-![CI/CD Pipeline](https://github.com/elliotberry/detawks/workflows/CI%2FCD%20Pipeline/badge.svg)
+![CI/CD Pipeline](https://github.com/elliotberry/detawks/workflows/CI/badge.svg)
 
 # D͓̽e͓̽t͓̽a͓̽w͓̽k͓̽s͓̽
 
 Renames files en masse so that when I scroll by them they all look uniform and pleasing.
 
-A lazy Node.js adaptation of [detox](https://github.com/dharple/detox), tailored with personal preferences for file naming. The primary motivation was to facilitate the installation of a detox setup using `yarn`. However, at length this started to take on some arguably useful configurations.
+A lazy Node.js adaptation of [detox](https://github.com/dharple/detox), tailored with personal preferences for file naming.
 
 ## Installation
 
@@ -14,12 +14,12 @@ A lazy Node.js adaptation of [detox](https://github.com/dharple/detox), tailored
 npm install -g detawks
 ```
 
+Requires Node.js 20.19 or later. Linux and macOS only.
+
 ## Usage
 
-In your favorite terminal, run:
-
 ```bash
-detawks <options> <glob / directory / file> 
+detawks <options> <glob / directory / file>
 ```
 
 ### For Example
@@ -30,29 +30,33 @@ detawks ./a_VERy_bad__filename.zip
 a_VERy_bad__filename.zip -> a-very-bad-filename.zip
 ```
 
+Passing a directory is recursive. Use `--max-depth 0` to rename only files in that directory.
+
 ### Options
 
 - `-s, --silent`: Silent mode (no console logs for new file names).
 - `-d, --dryrun`: Dry run (shows potential file renames without executing them).
-- `-r, --rename`: if overwrite is possible, rename files AUTOMAGICALLY without prompting. This will take the form of `file-01.ext`, `file-02.ext`, etc.
-- `-f, --dirs`: Includes directories in the operation. e.g. renames those too.
-- `-m, --max-depth`: Specifies max depth for operations.
-- `-b, --batch-size`: Number of files to process concurrently (default: 50). Use lower values for limited resources, higher for better performance.
-- `-l, --list`: List all possible string operations (see below for a more direct method of perusing this information).
-- `-h, --help`: Show something approximating this, if I remember to update it.
+- `-r, --rename`: On collision, auto-suffix (`file-01.ext`, `file-02.ext`, …). This is the default. Use `--no-rename` to skip files whose target already exists.
+- `-f, --dirs`: Include directories in the operation (renames those too, deepest first).
+- `-m, --max-depth`: Max crawl depth. `0` means this directory only. Omit for unlimited.
+- `-b, --batch-size`: Number of files to process concurrently (default: 50). Directory renames (`-f`) always run sequentially.
+- `-l, --list`: List all available string operations.
+- `-h, --help`: Show help.
 
 ### Performance Features
 
-- **Concurrent Processing**: Files are processed in parallel for faster operation
-- **Progress Indicators**: Shows progress for large file sets (>10 files)
-- **Performance Monitoring**: Reports processing speed for large operations
-- **Configurable Concurrency**: Adjust batch size based on your system capabilities
+- **Concurrent Processing**: After unique destination names are assigned, files are renamed in parallel (configurable batch size).
+- **Progress Indicators**: Shows progress for large file sets (>10 files).
+- **Configurable Concurrency**: Lower the batch size on limited systems.
 
 ### Examples
 
 ```bash
-# Basic usage with default settings
+# Recursive rename of a folder
 detawks ./files
+
+# This directory only
+detawks --max-depth 0 ./files
 
 # High-performance processing
 detawks --batch-size 100 ./files
@@ -60,18 +64,22 @@ detawks --batch-size 100 ./files
 # Conservative processing for limited resources
 detawks --batch-size 10 ./files
 
-# Dry run with progress indicators
-detawks --dryrun --batch-size 25 ./files
+# Dry run
+detawks --dryrun ./files
+
+# Skip collisions instead of suffixing
+detawks --no-rename ./files
 ```
 
-## Configuration to Your Most Personal Desires
+## Configuration
 
-The configuration file follows the `rc` [package conventions](https://www.npmjs.com/package/rc) - create your own config at `~/.detawksrc`. The default configuration is located at `./default.detawksrc`.
+The configuration file follows the `rc` [package conventions](https://www.npmjs.com/package/rc) — create your own at `~/.detawksrc`. The shipped default is `./default.detawksrc`.
 
 ### Example Configuration
 
-```
- "ignores": [
+```json
+{
+    "ignores": [
         "node_modules",
         ".git",
         ".DS_Store"
@@ -87,19 +95,21 @@ The configuration file follows the `rc` [package conventions](https://www.npmjs.
             "args": {
                 "num": 100
             }
-        }
+        },
+        "fallbackToRandom"
     ]
+}
 ```
 
-Like in Detox, you can specify a sequence of functions to apply to a string. Right now, you can only specify the absurd ones I've written (see below), but I'll add more, or not. When they take arguments, you can specify them in the `args` object as shown above.
+Like Detox, you specify a sequence of functions to apply to each basename. When a function takes arguments, pass an object with `name` and `args` as shown above.
 
-'ignores' is an array of globs that will be ignored when renaming files.
+`ignores` is an array of [picomatch](https://github.com/micromatch/picomatch) globs. Basename matches (e.g. `node_modules`) also skip that directory during the crawl.
 
-## Glossary: String Fuckery Sequence Functions Supported
+## Glossary: String Functions
 
 *(see `./lib/string-modification-functions.js` for more details)*
 
-- **toParamCase**: Converts a string to param case, transforming spaces and special characters to hyphens and converting all letters to lowercase.
+- **toParamCase**: Converts a string to param case (spaces and special characters to hyphens, lowercase).
 - **removeInvalidChars**: Removes characters that aren't lowercase letters, numbers, spaces, or hyphens.
 - **toString**: Ensures the input is of string type.
 - **trim**: Strips leading and trailing whitespace.
@@ -109,14 +119,13 @@ Like in Detox, you can specify a sequence of functions to apply to a string. Rig
 - **minChars**: Removes a specified number of characters from the start (default is 3).
 - **removeConsecutiveDashes**: Replaces consecutive dashes with a single dash.
 - **removeConsecutiveDashesAtStartEnd**: Removes consecutive dashes at the start and end of the string.
-- **fallbackToRandom**: If the string is empty, it returns a random string generated using `Math.random()` and `toString(36)`.
+- **fallbackToRandom**: If the string is empty, returns a short random ASCII string. Empty and emoji-only names use this when it is in the sequence (it is in the default).
+- **replaceAmpersand**: Replaces `&` with `and`.
 
 Look at `slugify.js` to see the rats' nest of code that makes this work.
-
-And that's how I made converting strings to ASCII too complicated, while barely understanding how character encoding works!
 
 ### Acknowledgements
 
 Special thanks to this contributor: [https://gist.github.com/codeguy/6684588](https://gist.github.com/codeguy/6684588)
 
-fdir is a great library for getting lists of files out of dirs fast as all hell. Check it out: [https://github.com/thecodrr/fdir](github link)
+[fdir](https://github.com/thecodrr/fdir) is a great library for getting lists of files out of dirs fast as all hell.

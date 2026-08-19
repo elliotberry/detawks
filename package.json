@@ -3,19 +3,17 @@
     "version": "0.1.19",
     "description": "An opinionated mass file renamer in Node. Meant to be similar to the venerable detox unix application, but, crappier, since it's my attempt in nodejs.",
     "keywords": [
-        "cool",
-        "useful",
-        "stuff",
         "renaming",
         "detox",
         "cli",
-        "hentai"
+        "slugify",
+        "files"
     ],
     "repository": {
         "type": "git",
         "url": "git@github.com:elliotberry/detawks.git"
     },
-    "license": "The Unlicense",
+    "license": "Unlicense",
     "author": "ɛʟʟɨօȶ b",
     "type": "module",
     "main": "./index.js",
@@ -24,11 +22,12 @@
     "files": [
         "lib/**/*",
         "index.js",
-        "cli.js"
+        "cli.js",
+        "default.detawksrc"
     ],
     "scripts": {
-        "lint": "eslint . --ext .js",
-        "lint:fix": "eslint . --ext .js --fix",
+        "lint": "eslint .",
+        "lint:fix": "eslint . --fix",
         "release": "release-it --ci",
         "test": "node ./test/test.js"
     },
@@ -40,7 +39,6 @@
     },
     "dependencies": {
         "chalk": "^5.6.2",
-        "change-case": "^5.4.4",
         "fdir": "^6.5.0",
         "picomatch": "^4.x",
         "rc": "^1.2.8",
@@ -48,6 +46,7 @@
         "yargs": "^18.0.0"
     },
     "devDependencies": {
+        "@eslint/js": "^10.0.1",
         "eslint": "^10.4.0",
         "eslint-plugin-import-x": "^4.16.2",
         "eslint-plugin-node-dependencies": "^2.2.0",

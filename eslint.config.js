@@ -8,12 +8,24 @@ import sonarjs from 'eslint-plugin-sonarjs'
 import eslintPluginUnicorn from 'eslint-plugin-unicorn'
 
 export default [
+    {
+        ignores: ['node_modules/**', 'test-assets/**'],
+    },
     eslintPluginUnicorn.configs['flat/recommended'],
     js.configs.recommended,
     ...nodeDependenciesPlugin.configs['flat/recommended'],
     sonarjs.configs.recommended,
     packageJson.configs.recommended,
     importX.flatConfigs.recommended,
+    {
+        files: ['package.json'],
+        rules: {
+            'package-json/no-redundant-files': 'off',
+            'package-json/no-redundant-publishConfig': 'off',
+            'package-json/require-exports': 'off',
+            'package-json/require-sideEffects': 'off',
+        },
+    },
     {
         files: ['**/*.js'],
         languageOptions: {
@@ -23,6 +35,7 @@ export default [
                 console: 'readonly',
                 fetch: 'readonly',
                 process: 'readonly',
+                URL: 'readonly',
             },
             sourceType: 'module',
         },
@@ -40,7 +53,7 @@ export default [
             'perfectionist/sort-classes': 'warn',
             'perfectionist/sort-enums': 'warn',
             'perfectionist/sort-exports': 'warn',
-            'perfectionist/sort-imports': 'warn',
+            'perfectionist/sort-imports': 'off',
             'perfectionist/sort-interfaces': 'warn',
             'perfectionist/sort-jsx-props': 'warn',
             'perfectionist/sort-maps': 'warn',
@@ -50,11 +63,16 @@ export default [
             'perfectionist/sort-objects': 'warn',
             'simple-import-sort/exports': 'warn',
             'simple-import-sort/imports': 'warn',
+            'sonarjs/cognitive-complexity': 'warn',
             'sonarjs/no-nested-template-literals': 'warn',
+            'sonarjs/pseudo-random': 'off',
+            'sonarjs/slow-regex': 'warn',
             'unicorn/consistent-function-scoping': 'warn',
+            'unicorn/filename-case': 'warn',
             'unicorn/no-array-callback-reference': 'warn',
             'unicorn/no-null': 'warn',
             'unicorn/no-process-exit': 'off',
+            'unicorn/prefer-native-coercion-functions': 'off',
             'unicorn/prefer-switch': 'off',
             'unicorn/prefer-top-level-await': 'off',
             'unicorn/prevent-abbreviations': 'warn',

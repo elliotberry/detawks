@@ -1,9 +1,8 @@
 {
     "dryrun": false,
     "directories": false,
-    "silent": true,
+    "silent": false,
     "rename": true,
-
     "ignores": [
         "node_modules",
         ".DS_Store",
@@ -14,6 +13,7 @@
         "trim",
         "doSwaps",
         "lowerCase",
-        "toParamCase"
+        "toParamCase",
+        "fallbackToRandom"
     ]
 }
